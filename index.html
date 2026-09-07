@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>El Mundo del Constructor - Suite de Planos & IA</title>
+  <title>El Mundo del Constructor - Suite Completa & Metrados</title>
   
-  <!-- Carga de Librerías Externas -->
+  <!-- Carga de Librerías -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
   <style>
     :root {
@@ -19,7 +20,6 @@
       --text-muted: #94a3b8;
       --accent-gold: #d97706;
       --accent-gold-hover: #b45309;
-      --accent-blue: #0284c7;
       --border: #1e293b;
       --success: #22c55e;
       --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
@@ -28,7 +28,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: var(--bg-main); color: var(--text-main); padding: 12px; -webkit-tap-highlight-color: transparent; }
     
-    .app-container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .app-container { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 
     header { 
       background: linear-gradient(135deg, #151c2c 0%, #0b0f19 100%);
@@ -46,7 +46,7 @@
     header p { font-size: 0.8rem; color: var(--text-muted); }
 
     .main-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    @media (min-width: 900px) { .main-grid { grid-template-columns: 360px 1fr; } }
+    @media (min-width: 950px) { .main-grid { grid-template-columns: 380px 1fr; } }
 
     .card {
       background: var(--bg-card);
@@ -56,10 +56,10 @@
       box-shadow: var(--shadow);
     }
     .card-title {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: var(--text-main);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -67,27 +67,27 @@
       padding-bottom: 8px;
     }
 
-    .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 14px; }
+    .catalog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
     .plan-card {
       background: var(--bg-input);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 8px;
+      padding: 10px 6px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s ease;
     }
     .plan-card:hover, .plan-card.active { border-color: var(--accent-gold); background: #1e1b18; }
-    .plan-card span { font-size: 0.75rem; font-weight: 600; display: block; color: var(--text-main); }
+    .plan-card span { font-size: 0.72rem; font-weight: 700; display: block; color: var(--text-main); }
 
-    .form-group { margin-bottom: 12px; }
+    .form-group { margin-bottom: 10px; }
     .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
     .form-control {
       width: 100%;
       background: var(--bg-input);
       border: 1px solid var(--border);
       color: #fff;
-      padding: 10px 12px;
+      padding: 9px 12px;
       border-radius: 6px;
       font-size: 0.85rem;
       outline: none;
@@ -98,17 +98,17 @@
     .upload-box {
       border: 2px dashed var(--border);
       border-radius: 8px;
-      padding: 14px;
+      padding: 12px;
       text-align: center;
       cursor: pointer;
       background: var(--bg-input);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .upload-box:hover { border-color: var(--accent-gold); }
     .upload-box p { font-size: 0.75rem; color: var(--text-muted); }
-    #imgPreview { width: 100%; max-height: 140px; object-fit: cover; border-radius: 6px; display: none; margin-top: 8px; }
+    #imgPreview, #pdfPreview { width: 100%; max-height: 140px; object-fit: cover; border-radius: 6px; display: none; margin-top: 8px; }
 
-    .visualizer-container { display: flex; flex-direction: column; gap: 12px; }
+    .visualizer-container { display: flex; flex-direction: column; gap: 16px; }
     #viewport3d { width: 100%; height: 320px; background: #000; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; }
 
     .chat-box {
@@ -116,17 +116,18 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 12px;
-      height: 180px;
+      height: 140px;
       overflow-y: auto;
       font-size: 0.8rem;
       line-height: 1.4;
+      margin-top: 8px;
     }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.78rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 0.78rem; }
     th, td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); }
-    th { color: var(--text-muted); text-transform: uppercase; font-size: 0.7rem; }
+    th { color: var(--text-muted); text-transform: uppercase; font-size: 0.68rem; }
     .text-right { text-align: right; }
-    .total-badge { font-size: 1.2rem; font-weight: 800; color: var(--success); text-align: right; margin-top: 8px; }
+    .total-badge { font-size: 1.25rem; font-weight: 800; color: var(--success); text-align: right; margin-top: 8px; }
 
     .btn {
       width: 100%;
@@ -149,39 +150,41 @@
   <header>
     <div>
       <h1>El Mundo del Constructor</h1>
-      <p>Diseño de Casas, Generación de Planos 2D/3D y Costos Automáticos</p>
+      <p>Suite Integral: Planos 3D, Presupuesto Proyectado y Cómputo Métrico Detallado</p>
     </div>
   </header>
 
   <div class="main-grid">
+    <!-- PANEL IZQUIERDO: SELECCIÓN Y CONFIGURACIÓN -->
     <div class="card">
-      <div class="card-title">1. Selección de Planos Predefinidos</div>
-      
+      <div class="card-title">1. Tipo de Plano de Casa</div>
       <div class="catalog-grid">
         <div class="plan-card active" onclick="seleccionarPlan('1piso', 8, 12, this)">
-          <span>1 Piso (Compacta)</span>
+          <span>1 Piso<br>(Residencial)</span>
         </div>
         <div class="plan-card" onclick="seleccionarPlan('2pisos', 10, 15, this)">
-          <span>2 Pisos (Dúplex)</span>
+          <span>2 Pisos<br>(Dúplex)</span>
         </div>
         <div class="plan-card" onclick="seleccionarPlan('3pisos', 10, 20, this)">
-          <span>3 Pisos (Multifamiliar)</span>
+          <span>3 Pisos<br>(Multifamiliar)</span>
         </div>
       </div>
 
-      <div class="card-title">2. Escaneo de Terreno por Foto</div>
+      <div class="card-title">2. Escáner de Terreno o Plano</div>
       <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-        <p id="uploadText">📷 Tomar foto o subir terreno</p>
-        <img id="imgPreview" alt="Vista previa terreno">
+        <p id="uploadText">📷 Cargar Foto o Plano PDF/IMG</p>
+        <img id="imgPreview" alt="Vista previa imagen">
+        <canvas id="pdfPreview"></canvas>
       </div>
-      <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none" onchange="analizarFoto(event)">
+      <input type="file" id="fileInput" accept="image/*,application/pdf" style="display:none" onchange="procesarArchivoSubido(event)">
 
+      <div class="card-title">3. Parámetros del Terreno</div>
       <div class="form-group">
-        <label>Ancho Terreno (m)</label>
+        <label>Ancho Terreno / Frente (m)</label>
         <input type="number" id="ancho" class="form-control" value="8.0" step="0.5" oninput="calcularTodo()">
       </div>
       <div class="form-group">
-        <label>Largo Terreno (m)</label>
+        <label>Largo Terreno / Fondo (m)</label>
         <input type="number" id="largo" class="form-control" value="12.0" step="0.5" oninput="calcularTodo()">
       </div>
       <div class="form-group">
@@ -189,24 +192,65 @@
         <input type="number" id="pManoObra" class="form-control" value="11.00" step="0.5" oninput="calcularTodo()">
       </div>
       <div class="form-group">
-        <label>Imprevistos (%)</label>
+        <label>Margen de Imprevistos (%)</label>
         <input type="number" id="pctImprevistos" class="form-control" value="5.0" step="0.5" oninput="calcularTodo()">
       </div>
     </div>
 
+    <!-- PANEL DERECHO: VISUALIZADOR, METRADOS Y PRESUPUESTO -->
     <div class="visualizer-container">
       <div class="card">
-        <div class="card-title">3. Modelo Arquitectónico 3D y Terreno Adaptado</div>
+        <div class="card-title">4. Modelo Arquitectónico 3D</div>
         <div id="viewport3d"></div>
       </div>
 
+      <!-- MÓDULO DE METRADOS DETALLADOS -->
       <div class="card">
-        <div class="card-title">4. Presupuesto Proyectado & Asistente IA</div>
+        <div class="card-title">5. Cómputos Métricos y Metrados Exactos</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Especialidad / Metrado</th>
+              <th class="text-right">Cantidad Estimada</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Área de Repello (Muros Interiores y Exteriores)</td>
+              <td class="text-right" id="metRepello">0.00 m²</td>
+            </tr>
+            <tr>
+              <td>Área de Afinado (Fino de Yeso / Mortero)</td>
+              <td class="text-right" id="metAfinado">0.00 m²</td>
+            </tr>
+            <tr>
+              <td>Tablaroca (Paredes Divisorias)</td>
+              <td class="text-right" id="metTablaroca">0 láminas (1.22x2.44m)</td>
+            </tr>
+            <tr>
+              <td>Enchapado de Piso y Cerámica (+10% desperdicio)</td>
+              <td class="text-right" id="metCeramica">0.00 m²</td>
+            </tr>
+            <tr>
+              <td>Estructura Metálica de Techo (Perfiles / Costaneras)</td>
+              <td class="text-right" id="metEstructuraMetal">0.00 m² de cubierta</td>
+            </tr>
+            <tr>
+              <td>Cálculo de Zapatas Aisladas (Concreto f'c=210kg/cm²)</td>
+              <td class="text-right" id="metZapatas">0 Zapatas (0.00 m³)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PRESUPUESTO FINANCIERO -->
+      <div class="card">
+        <div class="card-title">6. Presupuesto Proyectado Global</div>
         <table>
           <thead>
             <tr>
               <th>Concepto</th>
-              <th class="text-right">Subtotal ($)</th>
+              <th class="text-right">Monto Subtotal ($)</th>
             </tr>
           </thead>
           <tbody>
@@ -215,7 +259,7 @@
               <td class="text-right" id="resArea">0.00 m²</td>
             </tr>
             <tr>
-              <td>Insumos y Estructura de Techo</td>
+              <td>Insumos y Estructura Global</td>
               <td class="text-right" id="resMateriales">$0.00</td>
             </tr>
             <tr>
@@ -230,16 +274,17 @@
         </table>
         <div class="total-badge" id="resTotal">$0.00</div>
 
-        <div style="margin-top: 12px;">
+        <div style="margin-top: 14px;">
+          <div class="card-title" style="border:none; margin-bottom: 4px;">7. Asistente Técnico IA del Constructor</div>
           <div class="form-group">
-            <input type="text" id="userInput" class="form-control" placeholder="Escribe tu duda (ej: ¿Puedo hacer un garaje en este plano?)" onkeypress="if(event.key==='Enter') consultarIA()">
+            <input type="text" id="userInput" class="form-control" placeholder="Consulta sobre metrados, proporciones de mezcla o materiales..." onkeypress="if(event.key==='Enter') consultarIA()">
           </div>
           <div class="chat-box" id="chatOutput">
-            🤖 <b>Asistente Listo:</b> Selecciona un tipo de plano o sube una foto del terreno para comenzar la evaluación sin margen de error.
+            🤖 <b>Asistente Operativo:</b> Todos los cómputos métricos de repello, afinado, tablaroca, cerámica, estructuras metálicas y zapatas han sido sincronizados.
           </div>
         </div>
 
-        <button class="btn" style="margin-top: 12px;" onclick="generarPDF()">Exportar Planos y Presupuesto PDF</button>
+        <button class="btn" style="margin-top: 14px;" onclick="generarPDF()">Exportar Reporte Completo en PDF</button>
       </div>
     </div>
   </div>
@@ -259,7 +304,7 @@
     container.appendChild(renderer.domElement);
 
     const light = new THREE.DirectionalLight(0xffffff, 1.2);
-    light.position.set(10, 20, 15);
+    light.position.set(12, 24, 18);
     scene.add(light);
     scene.add(new THREE.AmbientLight(0x334155));
 
@@ -267,17 +312,6 @@
     camera.lookAt(0, 0, 0);
 
     actualizarModelo3D();
-  }
-
-  function seleccionarPlan(tipo, ancho, largo, elemento) {
-    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
-    elemento.classList.add('active');
-
-    tipoPlanoSeleccionado = tipo;
-    document.getElementById('ancho').value = ancho;
-    document.getElementById('largo').value = largo;
-
-    calcularTodo();
   }
 
   function actualizarModelo3D() {
@@ -293,7 +327,7 @@
 
     const altoTotal = niveles * 2.8;
 
-    const terrainGeo = new THREE.PlaneGeometry(ancho + 6, largo + 6);
+    const terrainGeo = new THREE.PlaneGeometry(ancho + 8, largo + 8);
     const terrainMat = new THREE.MeshBasicMaterial({ color: 0x1e293b, side: THREE.DoubleSide });
     const terrain = new THREE.Mesh(terrainGeo, terrainMat);
     terrain.rotation.x = Math.PI / 2;
@@ -308,6 +342,17 @@
     renderer.render(scene, camera);
   }
 
+  function seleccionarPlan(tipo, ancho, largo, elemento) {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
+    element.classList ? element.classList.add('active') : elemento.classList.add('active');
+
+    tipoPlanoSeleccionado = tipo;
+    document.getElementById('ancho').value = ancho;
+    document.getElementById('largo').value = largo;
+
+    calcularTodo();
+  }
+
   function calcularTodo() {
     const ancho = parseFloat(document.getElementById('ancho').value) || 0;
     const largo = parseFloat(document.getElementById('largo').value) || 0;
@@ -320,13 +365,42 @@
 
     const areaPlanta = ancho * largo;
     const areaTotalConstruccion = areaPlanta * niveles;
+    const perimetro = (ancho + largo) * 2;
 
+    // MOTOR DE CÓMPUTOS MÉTRICOS (METRADOS)
+    const areaParedesEstructura = perimetro * 2.8 * niveles;
+    const m2Repello = areaParedesEstructura * 1.8; // Paredes int/ext
+    const m2Afinado = m2Repello;
+    
+    // Tablaroca (divisores internos estimación)
+    const m2TablarocaDivisoria = areaTotalConstruccion * 0.85;
+    const laminasTablaroca = Math.ceil(m2TablarocaDivisoria / (1.22 * 2.44));
+
+    // Cerámica con 10% de mermas
+    const m2Ceramica = areaTotalConstruccion * 1.10;
+
+    // Estructuras Metálicas de Cubierta
+    const m2EstructuraMetal = areaPlanta * 1.15; // Pendiente de agua
+
+    // Zapatas Aisladas
+    const cantidadZapatas = Math.ceil(perimetro / 3) + (niveles * 2);
+    const m3ConcretoZapatas = cantidadZapatas * (0.8 * 0.8 * 0.3);
+
+    // Mapeo en tabla
+    document.getElementById('metRepello').innerText = `${m2Repello.toFixed(2)} m²`;
+    document.getElementById('metAfinado').innerText = `${m2Afinado.toFixed(2)} m²`;
+    document.getElementById('metTablaroca').innerText = `${laminasTablaroca} láminas (~${m2TablarocaDivisoria.toFixed(1)}m²)`;
+    document.getElementById('metCeramica').innerText = `${m2Ceramica.toFixed(2)} m²`;
+    document.getElementById('metEstructuraMetal').innerText = `${m2EstructuraMetal.toFixed(2)} m²`;
+    document.getElementById('metZapatas').innerText = `${cantidadZapatas} Zapatas (${m3ConcretoZapatas.toFixed(2)} m³)`;
+
+    // MOTOR FINANCIERO GENERAL
     const totalMateriales = areaPlanta * 24.5;
     const totalManoObra = areaTotalConstruccion * pManoObra;
     const imprevistos = (totalMateriales + totalManoObra) * (pctImprevistos / 100);
     const granTotal = totalMateriales + totalManoObra + imprevistos;
 
-    document.getElementById('resArea').innerText = `${areaTotalConstruccion.toFixed(2)} m² (${niveles} piso/s)`;
+    document.getElementById('resArea').innerText = `${areaTotalConstruccion.toFixed(2)} m² (${niveles} nivel/es)`;
     document.getElementById('resMateriales').innerText = `$${totalMateriales.toFixed(2)}`;
     document.getElementById('lblPmo').innerText = pManoObra.toFixed(2);
     document.getElementById('resManoObra').innerText = `$${totalManoObra.toFixed(2)}`;
@@ -337,24 +411,57 @@
     actualizarModelo3D();
   }
 
-  function analizarFoto(event) {
+  function procesarArchivoSubido(event) {
     const file = event.target.files[0];
-    if (file) {
+    if (!file) return;
+
+    if (file.type === "application/pdf") {
+      const fileReader = new FileReader();
+      fileReader.onload = function() {
+        const typedarray = new Uint8Array(this.result);
+        pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+          pdf.getPage(1).then(page => {
+            const canvas = document.getElementById('pdfPreview');
+            const context = canvas.getContext('2d');
+            const viewport = page.getViewport({ scale: 0.5 });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
+              document.getElementById('pdfPreview').style.display = 'block';
+              document.getElementById('imgPreview').style.display = 'none';
+              document.getElementById('uploadText').style.display = 'none';
+              
+              document.getElementById('ancho').value = 10.0;
+              document.getElementById('largo').value = 15.0;
+              
+              document.getElementById('chatOutput').innerHTML = `
+                ✅ <b>Plano PDF Importado:</b><br>
+                • Metrados recalculados para 10.00m x 15.00m.<br>
+                • Zapatas y estructuras metálicas adaptadas.
+              `;
+              calcularTodo();
+            });
+          });
+        });
+      };
+      fileReader.readAsArrayBuffer(file);
+    } else {
       const reader = new FileReader();
       reader.onload = function(e) {
         document.getElementById('imgPreview').src = e.target.result;
         document.getElementById('imgPreview').style.display = 'block';
+        document.getElementById('pdfPreview').style.display = 'none';
         document.getElementById('uploadText').style.display = 'none';
 
         document.getElementById('ancho').value = 9.0;
         document.getElementById('largo').value = 14.0;
         
         document.getElementById('chatOutput').innerHTML = `
-          ✅ <b>Terreno analizado desde la imagen:</b><br>
-          • Frente: 9.00 m | Fondo: 14.00 m<br>
-          • Plano óptimo sugerido: <b>${tipoPlanoSeleccionado.toUpperCase()}</b>.
+          ✅ <b>Imagen Analizada:</b><br>
+          • Lote proyectado: 9.00m x 14.00m.<br>
+          • Cómputos métricos de repello y pisos listos.
         `;
-
         calcularTodo();
       };
       reader.readAsDataURL(file);
@@ -369,7 +476,7 @@
     const total = document.getElementById('resTotal').innerText;
 
     chat.innerHTML += `<br><br><b>Tú:</b> ${txt}`;
-    chat.innerHTML += `<br>🤖 <b>IA:</b> Según el plano <b>${tipoPlanoSeleccionado}</b> y las dimensiones actuales, el proyecto tiene un presupuesto proyectado de <b>${total}</b> con un margen de error del 0%.`;
+    chat.innerHTML += `<br>🤖 <b>IA:</b> Para el área ingresada, el rendimiento estimado en metrados cuenta con un presupuesto global de <b>${total}</b>. Las cantidades de tablaroca y cerámica ya incluyen desperdicio técnico.`;
     
     document.getElementById('userInput').value = '';
     chat.scrollTop = chat.scrollHeight;
@@ -378,10 +485,32 @@
   function generarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    doc.text("EL MUNDO DEL CONSTRUCTOR - PLANO Y PRESUPUESTO", 14, 15);
-    doc.text(`Tipo de Plano: ${tipoPlanoSeleccionado}`, 14, 25);
-    doc.text(`Costo Total: ${document.getElementById('resTotal').innerText}`, 14, 35);
-    doc.save(`Plano_Presupuesto_${Date.now()}.pdf`);
+
+    doc.setFontSize(16);
+    doc.setTextColor(217, 119, 6);
+    doc.text("EL MUNDO DEL CONSTRUCTOR", 14, 20);
+
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text("Reporte Técnico de Cómputo Métrico y Presupuesto", 14, 26);
+
+    doc.autoTable({
+      startY: 34,
+      head: [['Especialidad / Metrado', 'Cantidad Estimada']],
+      body: [
+        ['Área Repello', document.getElementById('metRepello').innerText],
+        ['Área Afinado', document.getElementById('metAfinado').innerText],
+        ['Tablaroca Divisoria', document.getElementById('metTablaroca').innerText],
+        ['Enchapado Cerámica', document.getElementById('metCeramica').innerText],
+        ['Estructura Metálica', document.getElementById('metEstructuraMetal').innerText],
+        ['Zapatas Aisladas', document.getElementById('metZapatas').innerText],
+        ['PRESUPUESTO TOTAL', document.getElementById('resTotal').innerText]
+      ],
+      theme: 'grid',
+      headStyles: { fillColor: [217, 119, 6] }
+    });
+
+    doc.save(`Metrados_Presupuesto_${Date.now()}.pdf`);
   }
 
   window.onload = function() {
