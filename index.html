@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>El Mundo del Constructor - Suite Completa & Metrados</title>
+  <title>El Mundo del Constructor - Suite Modular de Ingeniería</title>
   
   <!-- Carga de Librerías -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -45,6 +45,35 @@
     header h1 { font-size: 1.25rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-gold); }
     header p { font-size: 0.8rem; color: var(--text-muted); }
 
+    /* PESTAÑAS DE NAVEGACIÓN MODULAR */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tab-btn {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.82rem;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover, .tab-btn.active {
+      background: var(--accent-gold);
+      color: #fff;
+      border-color: var(--accent-gold);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
     .main-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
     @media (min-width: 950px) { .main-grid { grid-template-columns: 380px 1fr; } }
 
@@ -54,6 +83,7 @@
       border-radius: 12px;
       padding: 16px;
       box-shadow: var(--shadow);
+      margin-bottom: 16px;
     }
     .card-title {
       font-size: 0.92rem;
@@ -108,7 +138,6 @@
     .upload-box p { font-size: 0.75rem; color: var(--text-muted); }
     #imgPreview, #pdfPreview { width: 100%; max-height: 140px; object-fit: cover; border-radius: 6px; display: none; margin-top: 8px; }
 
-    .visualizer-container { display: flex; flex-direction: column; gap: 16px; }
     #viewport3d { width: 100%; height: 320px; background: #000; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; }
 
     .chat-box {
@@ -128,6 +157,8 @@
     th { color: var(--text-muted); text-transform: uppercase; font-size: 0.68rem; }
     .text-right { text-align: right; }
     .total-badge { font-size: 1.25rem; font-weight: 800; color: var(--success); text-align: right; margin-top: 8px; }
+
+    .grid-calc { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
 
     .btn {
       width: 100%;
@@ -150,142 +181,211 @@
   <header>
     <div>
       <h1>El Mundo del Constructor</h1>
-      <p>Suite Integral: Planos 3D, Presupuesto Proyectado y Cómputo Métrico Detallado</p>
+      <p>Suite Modular Independiente para Análisis, Diseño 3D y Cómputo de Materiales</p>
     </div>
   </header>
 
-  <div class="main-grid">
-    <!-- PANEL IZQUIERDO: SELECCIÓN Y CONFIGURACIÓN -->
-    <div class="card">
-      <div class="card-title">1. Tipo de Plano de Casa</div>
-      <div class="catalog-grid">
-        <div class="plan-card active" onclick="seleccionarPlan('1piso', 8, 12, this)">
-          <span>1 Piso<br>(Residencial)</span>
+  <!-- PESTAÑAS DE NAVEGACIÓN -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="cambiarPestana('tabCasa', this)">🏠 Proyecto de Casa & 3D</button>
+    <button class="tab-btn" onclick="cambiarPestana('tabRepello', this)">🧱 Repello y Afinado</button>
+    <button class="tab-btn" onclick="cambiarPestana('tabTablaroca', this)">📐 Tablaroca / Sheetrock</button>
+    <button class="tab-btn" onclick="cambiarPestana('tabCeramica', this)">🧱 Cerámica y Pisos</button>
+    <button class="tab-btn" onclick="cambiarPestana('tabTechos', this)">🏗️ Estructura Metálica / Techo</button>
+    <button class="tab-btn" onclick="cambiarPestana('tabZapatas', this)">🏛️ Zapatas y Concreto</button>
+  </div>
+
+  <!-- PESTAÑA 1: DISEÑO COMPLETO DE CASAS & 3D -->
+  <div id="tabCasa" class="tab-content active">
+    <div class="main-grid">
+      <div class="card">
+        <div class="card-title">1. Modelo de Vivienda</div>
+        <div class="catalog-grid">
+          <div class="plan-card active" onclick="seleccionarPlan('1piso', 8, 12, this)">
+            <span>1 Piso<br>(Residencial)</span>
+          </div>
+          <div class="plan-card" onclick="seleccionarPlan('2pisos', 10, 15, this)">
+            <span>2 Pisos<br>(Dúplex)</span>
+          </div>
+          <div class="plan-card" onclick="seleccionarPlan('3pisos', 10, 20, this)">
+            <span>3 Pisos<br>(Multifamiliar)</span>
+          </div>
         </div>
-        <div class="plan-card" onclick="seleccionarPlan('2pisos', 10, 15, this)">
-          <span>2 Pisos<br>(Dúplex)</span>
+
+        <div class="card-title">2. Escáner de Terreno / Plano</div>
+        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+          <p id="uploadText">📷 Cargar Foto o Plano PDF/IMG</p>
+          <img id="imgPreview" alt="Vista previa imagen">
+          <canvas id="pdfPreview"></canvas>
         </div>
-        <div class="plan-card" onclick="seleccionarPlan('3pisos', 10, 20, this)">
-          <span>3 Pisos<br>(Multifamiliar)</span>
+        <input type="file" id="fileInput" accept="image/*,application/pdf" style="display:none" onchange="procesarArchivoSubido(event)">
+
+        <div class="card-title">3. Parámetros del Terreno</div>
+        <div class="form-group">
+          <label>Frente / Ancho (m)</label>
+          <input type="number" id="ancho" class="form-control" value="8.0" step="0.5" oninput="calcularTodo()">
+        </div>
+        <div class="form-group">
+          <label>Fondo / Largo (m)</label>
+          <input type="number" id="largo" class="form-control" value="12.0" step="0.5" oninput="calcularTodo()">
+        </div>
+        <div class="form-group">
+          <label>Mano de Obra ($/m²)</label>
+          <input type="number" id="pManoObra" class="form-control" value="11.00" step="0.5" oninput="calcularTodo()">
         </div>
       </div>
 
-      <div class="card-title">2. Escáner de Terreno o Plano</div>
-      <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-        <p id="uploadText">📷 Cargar Foto o Plano PDF/IMG</p>
-        <img id="imgPreview" alt="Vista previa imagen">
-        <canvas id="pdfPreview"></canvas>
-      </div>
-      <input type="file" id="fileInput" accept="image/*,application/pdf" style="display:none" onchange="procesarArchivoSubido(event)">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="card">
+          <div class="card-title">Visor Arquitectónico 3D</div>
+          <div id="viewport3d"></div>
+        </div>
 
-      <div class="card-title">3. Parámetros del Terreno</div>
-      <div class="form-group">
-        <label>Ancho Terreno / Frente (m)</label>
-        <input type="number" id="ancho" class="form-control" value="8.0" step="0.5" oninput="calcularTodo()">
-      </div>
-      <div class="form-group">
-        <label>Largo Terreno / Fondo (m)</label>
-        <input type="number" id="largo" class="form-control" value="12.0" step="0.5" oninput="calcularTodo()">
-      </div>
-      <div class="form-group">
-        <label>Mano de Obra ($/m²)</label>
-        <input type="number" id="pManoObra" class="form-control" value="11.00" step="0.5" oninput="calcularTodo()">
-      </div>
-      <div class="form-group">
-        <label>Margen de Imprevistos (%)</label>
-        <input type="number" id="pctImprevistos" class="form-control" value="5.0" step="0.5" oninput="calcularTodo()">
+        <div class="card">
+          <div class="card-title">Presupuesto General Proyectado</div>
+          <table>
+            <thead><tr><th>Concepto</th><th class="text-right">Monto ($)</th></tr></thead>
+            <tbody>
+              <tr><td>Área Total Construcción</td><td class="text-right" id="resArea">0.00 m²</td></tr>
+              <tr><td>Insumos y Estructura Global</td><td class="text-right" id="resMateriales">$0.00</td></tr>
+              <tr><td>Mano de Obra Directa</td><td class="text-right" id="resManoObra">$0.00</td></tr>
+            </tbody>
+          </table>
+          <div class="total-badge" id="resTotal">$0.00</div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- PANEL DERECHO: VISUALIZADOR, METRADOS Y PRESUPUESTO -->
-    <div class="visualizer-container">
+  <!-- PESTAÑA 2: REPELLO Y AFINADO -->
+  <div id="tabRepello" class="tab-content">
+    <div class="grid-calc">
       <div class="card">
-        <div class="card-title">4. Modelo Arquitectónico 3D</div>
-        <div id="viewport3d"></div>
+        <div class="card-title">🧱 Datos del Muro / Pared</div>
+        <div class="form-group"><label>Largo Muro (m)</label><input type="number" id="repLargo" class="form-control" value="10" oninput="calcRepello()"></div>
+        <div class="form-group"><label>Alto Muro (m)</label><input type="number" id="repAlto" class="form-control" value="2.8" oninput="calcRepello()"></div>
+        <div class="form-group"><label>Grosor Capa (cm)</label><input type="number" id="repGrosor" class="form-control" value="1.5" step="0.1" oninput="calcRepello()"></div>
       </div>
-
-      <!-- MÓDULO DE METRADOS DETALLADOS -->
       <div class="card">
-        <div class="card-title">5. Cómputos Métricos y Metrados Exactos</div>
+        <div class="card-title">📊 Materiales Necesarios para Repello</div>
         <table>
-          <thead>
-            <tr>
-              <th>Especialidad / Metrado</th>
-              <th class="text-right">Cantidad Estimada</th>
-            </tr>
-          </thead>
           <tbody>
-            <tr>
-              <td>Área de Repello (Muros Interiores y Exteriores)</td>
-              <td class="text-right" id="metRepello">0.00 m²</td>
-            </tr>
-            <tr>
-              <td>Área de Afinado (Fino de Yeso / Mortero)</td>
-              <td class="text-right" id="metAfinado">0.00 m²</td>
-            </tr>
-            <tr>
-              <td>Tablaroca (Paredes Divisorias)</td>
-              <td class="text-right" id="metTablaroca">0 láminas (1.22x2.44m)</td>
-            </tr>
-            <tr>
-              <td>Enchapado de Piso y Cerámica (+10% desperdicio)</td>
-              <td class="text-right" id="metCeramica">0.00 m²</td>
-            </tr>
-            <tr>
-              <td>Estructura Metálica de Techo (Perfiles / Costaneras)</td>
-              <td class="text-right" id="metEstructuraMetal">0.00 m² de cubierta</td>
-            </tr>
-            <tr>
-              <td>Cálculo de Zapatas Aisladas (Concreto f'c=210kg/cm²)</td>
-              <td class="text-right" id="metZapatas">0 Zapatas (0.00 m³)</td>
-            </tr>
+            <tr><td>Área Muro</td><td class="text-right" id="rArea">0.00 m²</td></tr>
+            <tr><td>Bolsas Cemento (42.5kg)</td><td class="text-right" id="rCemento">0 Bolsas</td></tr>
+            <tr><td>Arena fina/colada</td><td class="text-right" id="rArena">0.00 m³</td></tr>
+            <tr><td>Agua estimada</td><td class="text-right" id="rAgua">0 Litros</td></tr>
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
 
-      <!-- PRESUPUESTO FINANCIERO -->
+  <!-- PESTAÑA 3: TABLAROCA -->
+  <div id="tabTablaroca" class="tab-content">
+    <div class="grid-calc">
       <div class="card">
-        <div class="card-title">6. Presupuesto Proyectado Global</div>
-        <table>
-          <thead>
-            <tr>
-              <th>Concepto</th>
-              <th class="text-right">Monto Subtotal ($)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Área Total de Construcción</td>
-              <td class="text-right" id="resArea">0.00 m²</td>
-            </tr>
-            <tr>
-              <td>Insumos y Estructura Global</td>
-              <td class="text-right" id="resMateriales">$0.00</td>
-            </tr>
-            <tr>
-              <td>Mano de Obra Directa ($<span id="lblPmo">11.00</span>/m²)</td>
-              <td class="text-right" id="resManoObra">$0.00</td>
-            </tr>
-            <tr>
-              <td>Imprevistos (<span id="lblPct">5.0</span>%)</td>
-              <td class="text-right" id="resImprevistos">$0.00</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="total-badge" id="resTotal">$0.00</div>
-
-        <div style="margin-top: 14px;">
-          <div class="card-title" style="border:none; margin-bottom: 4px;">7. Asistente Técnico IA del Constructor</div>
-          <div class="form-group">
-            <input type="text" id="userInput" class="form-control" placeholder="Consulta sobre metrados, proporciones de mezcla o materiales..." onkeypress="if(event.key==='Enter') consultarIA()">
-          </div>
-          <div class="chat-box" id="chatOutput">
-            🤖 <b>Asistente Operativo:</b> Todos los cómputos métricos de repello, afinado, tablaroca, cerámica, estructuras metálicas y zapatas han sido sincronizados.
-          </div>
+        <div class="card-title">📐 Pared Divisoria de Tablaroca</div>
+        <div class="form-group"><label>Largo Pared (m)</label><input type="number" id="tabLargo" class="form-control" value="6" oninput="calcTablaroca()"></div>
+        <div class="form-group"><label>Alto Pared (m)</label><input type="number" id="tabAlto" class="form-control" value="2.6" oninput="calcTablaroca()"></div>
+        <div class="form-group"><label>Caras a Forrar</label>
+          <select id="tabCaras" class="form-control" onchange="calcTablaroca()">
+            <option value="2">2 Caras (Pared completa)</option>
+            <option value="1">1 Cara (Forro/Falso)</option>
+          </select>
         </div>
-
-        <button class="btn" style="margin-top: 14px;" onclick="generarPDF()">Exportar Reporte Completo en PDF</button>
       </div>
+      <div class="card">
+        <div class="card-title">📊 Insumos de Sistema Liviano</div>
+        <table>
+          <tbody>
+            <tr><td>Láminas (1.22x2.44m)</td><td class="text-right" id="tLaminas">0 Láminas</td></tr>
+            <tr><td>Postes/Canales Metálicos</td><td class="text-right" id="tPerfiles">0 Unidades</td></tr>
+            <tr><td>Tornillos Punta Broca</td><td class="text-right" id="tTornillos">0 Unidades</td></tr>
+            <tr><td>Cinta y Masilla / Paste</td><td class="text-right" id="tPaste">0 Cubetas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESTAÑA 4: CERÁMICA Y PISOS -->
+  <div id="tabCeramica" class="tab-content">
+    <div class="grid-calc">
+      <div class="card">
+        <div class="card-title">🧱 Área a Enchapar</div>
+        <div class="form-group"><label>Largo Área (m)</label><input type="number" id="cerLargo" class="form-control" value="5" oninput="calcCeramica()"></div>
+        <div class="form-group"><label>Ancho Área (m)</label><input type="number" id="cerAncho" class="form-control" value="4" oninput="calcCeramica()"></div>
+        <div class="form-group"><label>Margen Desperdicio (%)</label><input type="number" id="cerDesperdicio" class="form-control" value="10" oninput="calcCeramica()"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Materiales de Piso</div>
+        <table>
+          <tbody>
+            <tr><td>Área Neta + Desperdicio</td><td class="text-right" id="cArea">0.00 m²</td></tr>
+            <tr><td>Cajas de Cerámica (aprox 1.44m²/caja)</td><td class="text-right" id="cCajas">0 Cajas</td></tr>
+            <tr><td>Sacos Pega-Azulejo / Pega-Cerámica</td><td class="text-right" id="cSacos">0 Sacos (20kg)</td></tr>
+            <tr><td>Fragua / Porcelanato</td><td class="text-right" id="cFragua">0 kg</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESTAÑA 5: ESTRUCTURA METÁLICA Y TECHOS -->
+  <div id="tabTechos" class="tab-content">
+    <div class="grid-calc">
+      <div class="card">
+        <div class="card-title">🏗️ Cubierta / Techo</div>
+        <div class="form-group"><label>Largo Techo (m)</label><input type="number" id="tecLargo" class="form-control" value="8" oninput="calcTecho()"></div>
+        <div class="form-group"><label>Ancho Techo (m)</label><input type="number" id="tecAncho" class="form-control" value="6" oninput="calcTecho()"></div>
+        <div class="form-group"><label>Distancia entre Polines/Costaneras (m)</label><input type="number" id="tecSeparacion" class="form-control" value="0.9" step="0.1" oninput="calcTecho()"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Materiales de Estructura Metálica</div>
+        <table>
+          <tbody>
+            <tr><td>Láminas de Techo (Zinc/Aluzinc)</td><td class="text-right" id="tecLaminas">0 Unidades</td></tr>
+            <tr><td>Polines / Costaneras C (6 metros)</td><td class="text-right" id="tecPolines">0 Unidades</td></tr>
+            <tr><td>Tornillos Polser / Capuchones</td><td class="text-right" id="tecTornillos">0 Unidades</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESTAÑA 6: ZAPATAS Y CONCRETO -->
+  <div id="tabZapatas" class="tab-content">
+    <div class="grid-calc">
+      <div class="card">
+        <div class="card-title">🏛️ Zapatas Aisladas de Cimentación</div>
+        <div class="form-group"><label>Cantidad de Zapatas</label><input type="number" id="zapCant" class="form-control" value="6" oninput="calcZapatas()"></div>
+        <div class="form-group"><label>Largo Zapata (m)</label><input type="number" id="zapLargo" class="form-control" value="1.0" step="0.1" oninput="calcZapatas()"></div>
+        <div class="form-group"><label>Ancho Zapata (m)</label><input type="number" id="zapAncho" class="form-control" value="1.0" step="0.1" oninput="calcZapatas()"></div>
+        <div class="form-group"><label>Espesor / Alto (m)</label><input type="number" id="zapAlto" class="form-control" value="0.3" step="0.05" oninput="calcZapatas()"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Concreto y Varillas de Hierro</div>
+        <table>
+          <tbody>
+            <tr><td>Volumen Total Concreto</td><td class="text-right" id="zVolumen">0.00 m³</td></tr>
+            <tr><td>Sacos Cemento (Proporción 1:2:3)</td><td class="text-right" id="zCemento">0 Sacos</td></tr>
+            <tr><td>Arena de Río</td><td class="text-right" id="zArena">0.00 m³</td></tr>
+            <tr><td>Grava / Triturado</td><td class="text-right" id="zGrava">0.00 m³</td></tr>
+            <tr><td>Varillas Hierro 3/8" o 1/2" (6m)</td><td class="text-right" id="zVarillas">0 Varillas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASISTENTE TÉCNICO FLOTANTE -->
+  <div class="card">
+    <div class="card-title">💬 Asistente Técnico y Consultas</div>
+    <div class="form-group">
+      <input type="text" id="userInput" class="form-control" placeholder="Consulta proporciones de mezcla o dudas de metrados..." onkeypress="if(event.key==='Enter') consultarIA()">
+    </div>
+    <div class="chat-box" id="chatOutput">
+      🤖 <b>Asistente Listo:</b> Navega entre las pestañas superiores para utilizar cada calculadora independiente.
     </div>
   </div>
 </div>
@@ -294,8 +394,24 @@
   let scene, camera, renderer, modeloActual;
   let tipoPlanoSeleccionado = '1piso';
 
+  /* CAMBIO DE PESTAÑAS */
+  function cambiarPestana(idPestana, btn) {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    document.getElementById(idPestana).classList.add('active');
+    btn.classList.add('active');
+
+    if(idPestana === 'tabCasa' && !renderer) {
+      setTimeout(init3D, 100);
+    }
+  }
+
+  /* MÓDULO 1: CASAS Y 3D */
   function init3D() {
     const container = document.getElementById('viewport3d');
+    if (!container || container.clientWidth === 0) return;
+
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     
@@ -344,7 +460,7 @@
 
   function seleccionarPlan(tipo, ancho, largo, elemento) {
     document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
-    element.classList ? element.classList.add('active') : elemento.classList.add('active');
+    elemento.classList.add('active');
 
     tipoPlanoSeleccionado = tipo;
     document.getElementById('ancho').value = ancho;
@@ -357,7 +473,6 @@
     const ancho = parseFloat(document.getElementById('ancho').value) || 0;
     const largo = parseFloat(document.getElementById('largo').value) || 0;
     const pManoObra = parseFloat(document.getElementById('pManoObra').value) || 0;
-    const pctImprevistos = parseFloat(document.getElementById('pctImprevistos').value) || 0;
 
     let niveles = 1;
     if (tipoPlanoSeleccionado === '2pisos') niveles = 2;
@@ -365,50 +480,104 @@
 
     const areaPlanta = ancho * largo;
     const areaTotalConstruccion = areaPlanta * niveles;
-    const perimetro = (ancho + largo) * 2;
 
-    // MOTOR DE CÓMPUTOS MÉTRICOS (METRADOS)
-    const areaParedesEstructura = perimetro * 2.8 * niveles;
-    const m2Repello = areaParedesEstructura * 1.8; // Paredes int/ext
-    const m2Afinado = m2Repello;
-    
-    // Tablaroca (divisores internos estimación)
-    const m2TablarocaDivisoria = areaTotalConstruccion * 0.85;
-    const laminasTablaroca = Math.ceil(m2TablarocaDivisoria / (1.22 * 2.44));
-
-    // Cerámica con 10% de mermas
-    const m2Ceramica = areaTotalConstruccion * 1.10;
-
-    // Estructuras Metálicas de Cubierta
-    const m2EstructuraMetal = areaPlanta * 1.15; // Pendiente de agua
-
-    // Zapatas Aisladas
-    const cantidadZapatas = Math.ceil(perimetro / 3) + (niveles * 2);
-    const m3ConcretoZapatas = cantidadZapatas * (0.8 * 0.8 * 0.3);
-
-    // Mapeo en tabla
-    document.getElementById('metRepello').innerText = `${m2Repello.toFixed(2)} m²`;
-    document.getElementById('metAfinado').innerText = `${m2Afinado.toFixed(2)} m²`;
-    document.getElementById('metTablaroca').innerText = `${laminasTablaroca} láminas (~${m2TablarocaDivisoria.toFixed(1)}m²)`;
-    document.getElementById('metCeramica').innerText = `${m2Ceramica.toFixed(2)} m²`;
-    document.getElementById('metEstructuraMetal').innerText = `${m2EstructuraMetal.toFixed(2)} m²`;
-    document.getElementById('metZapatas').innerText = `${cantidadZapatas} Zapatas (${m3ConcretoZapatas.toFixed(2)} m³)`;
-
-    // MOTOR FINANCIERO GENERAL
     const totalMateriales = areaPlanta * 24.5;
     const totalManoObra = areaTotalConstruccion * pManoObra;
-    const imprevistos = (totalMateriales + totalManoObra) * (pctImprevistos / 100);
-    const granTotal = totalMateriales + totalManoObra + imprevistos;
+    const granTotal = totalMateriales + totalManoObra;
 
-    document.getElementById('resArea').innerText = `${areaTotalConstruccion.toFixed(2)} m² (${niveles} nivel/es)`;
+    document.getElementById('resArea').innerText = `${areaTotalConstruccion.toFixed(2)} m²`;
     document.getElementById('resMateriales').innerText = `$${totalMateriales.toFixed(2)}`;
-    document.getElementById('lblPmo').innerText = pManoObra.toFixed(2);
     document.getElementById('resManoObra').innerText = `$${totalManoObra.toFixed(2)}`;
-    document.getElementById('lblPct').innerText = pctImprevistos.toFixed(1);
-    document.getElementById('resImprevistos').innerText = `$${imprevistos.toFixed(2)}`;
     document.getElementById('resTotal').innerText = `$${granTotal.toFixed(2)}`;
 
     actualizarModelo3D();
+  }
+
+  /* CALCULADORAS INDEPENDIENTES */
+  function calcRepello() {
+    const largo = parseFloat(document.getElementById('repLargo').value) || 0;
+    const alto = parseFloat(document.getElementById('repAlto').value) || 0;
+    const grosorCm = parseFloat(document.getElementById('repGrosor').value) || 1.5;
+
+    const area = largo * alto;
+    const volM3 = area * (grosorCm / 100);
+    const sacosCemento = Math.ceil(volM3 * 7.5);
+    const arenaM3 = (volM3 * 1.05).toFixed(2);
+    const aguaL = Math.round(sacosCemento * 20);
+
+    document.getElementById('rArea').innerText = `${area.toFixed(2)} m²`;
+    document.getElementById('rCemento').innerText = `${sacosCemento} Bolsas`;
+    document.getElementById('rArena').innerText = `${arenaM3} m³`;
+    document.getElementById('rAgua').innerText = `${aguaL} Lts`;
+  }
+
+  function calcTablaroca() {
+    const largo = parseFloat(document.getElementById('tabLargo').value) || 0;
+    const alto = parseFloat(document.getElementById('tabAlto').value) || 0;
+    const caras = parseInt(document.getElementById('tabCaras').value) || 2;
+
+    const area = largo * alto * caras;
+    const laminas = Math.ceil(area / (1.22 * 2.44));
+    const postes = Math.ceil((largo / 0.61) + 1);
+    const tornillos = laminas * 35;
+    const cubetasPaste = (laminas / 10).toFixed(1);
+
+    document.getElementById('tLaminas').innerText = `${laminas} Láminas`;
+    document.getElementById('tPerfiles').innerText = `${postes} Unidades`;
+    document.getElementById('tTornillos').innerText = `${tornillos} Unidades`;
+    document.getElementById('tPaste').innerText = `${cubetasPaste} Cubetas`;
+  }
+
+  function calcCeramica() {
+    const largo = parseFloat(document.getElementById('cerLargo').value) || 0;
+    const ancho = parseFloat(document.getElementById('cerAncho').value) || 0;
+    const desp = parseFloat(document.getElementById('cerDesperdicio').value) || 10;
+
+    const areaBase = largo * ancho;
+    const areaTotal = areaBase * (1 + (desp / 100));
+    const cajas = Math.ceil(areaTotal / 1.44);
+    const sacosPega = Math.ceil(areaTotal / 4);
+    const fraguaKg = (areaTotal * 0.5).toFixed(1);
+
+    document.getElementById('cArea').innerText = `${areaTotal.toFixed(2)} m²`;
+    document.getElementById('cCajas').innerText = `${cajas} Cajas`;
+    document.getElementById('cSacos').innerText = `${sacosPega} Sacos`;
+    document.getElementById('cFragua').innerText = `${fraguaKg} kg`;
+  }
+
+  function calcTecho() {
+    const largo = parseFloat(document.getElementById('tecLargo').value) || 0;
+    const ancho = parseFloat(document.getElementById('tecAncho').value) || 0;
+    const sep = parseFloat(document.getElementById('tecSeparacion').value) || 0.9;
+
+    const laminas = Math.ceil(ancho / 1.0);
+    const lineasPolines = Math.ceil(largo / sep);
+    const totalPolines = Math.ceil((lineasPolines * ancho) / 6.0);
+    const tornillos = laminas * 12;
+
+    document.getElementById('tecLaminas').innerText = `${laminas} Unidades`;
+    document.getElementById('tecPolines').innerText = `${totalPolines} Unidades (6m)`;
+    document.getElementById('tecTornillos').innerText = `${tornillos} Unidades`;
+  }
+
+  function calcZapatas() {
+    const cant = parseInt(document.getElementById('zapCant').value) || 0;
+    const largo = parseFloat(document.getElementById('zapLargo').value) || 0;
+    const ancho = parseFloat(document.getElementById('zapAncho').value) || 0;
+    const alto = parseFloat(document.getElementById('zapAlto').value) || 0;
+
+    const volUnit = largo * ancho * alto;
+    const volTotal = volUnit * cant;
+    const sacosCemento = Math.ceil(volTotal * 8.5);
+    const arenaM3 = (volTotal * 0.5).toFixed(2);
+    const gravaM3 = (volTotal * 0.7).toFixed(2);
+    const varillas = cant * 8;
+
+    document.getElementById('zVolumen').innerText = `${volTotal.toFixed(2)} m³`;
+    document.getElementById('zCemento').innerText = `${sacosCemento} Sacos`;
+    document.getElementById('zArena').innerText = `${arenaM3} m³`;
+    document.getElementById('zGrava').innerText = `${gravaM3} m³`;
+    document.getElementById('zVarillas').innerText = `${varillas} Varillas`;
   }
 
   function procesarArchivoSubido(event) {
@@ -431,15 +600,6 @@
               document.getElementById('pdfPreview').style.display = 'block';
               document.getElementById('imgPreview').style.display = 'none';
               document.getElementById('uploadText').style.display = 'none';
-              
-              document.getElementById('ancho').value = 10.0;
-              document.getElementById('largo').value = 15.0;
-              
-              document.getElementById('chatOutput').innerHTML = `
-                ✅ <b>Plano PDF Importado:</b><br>
-                • Metrados recalculados para 10.00m x 15.00m.<br>
-                • Zapatas y estructuras metálicas adaptadas.
-              `;
               calcularTodo();
             });
           });
@@ -453,15 +613,6 @@
         document.getElementById('imgPreview').style.display = 'block';
         document.getElementById('pdfPreview').style.display = 'none';
         document.getElementById('uploadText').style.display = 'none';
-
-        document.getElementById('ancho').value = 9.0;
-        document.getElementById('largo').value = 14.0;
-        
-        document.getElementById('chatOutput').innerHTML = `
-          ✅ <b>Imagen Analizada:</b><br>
-          • Lote proyectado: 9.00m x 14.00m.<br>
-          • Cómputos métricos de repello y pisos listos.
-        `;
         calcularTodo();
       };
       reader.readAsDataURL(file);
@@ -473,49 +624,21 @@
     if (!txt) return;
 
     const chat = document.getElementById('chatOutput');
-    const total = document.getElementById('resTotal').innerText;
-
     chat.innerHTML += `<br><br><b>Tú:</b> ${txt}`;
-    chat.innerHTML += `<br>🤖 <b>IA:</b> Para el área ingresada, el rendimiento estimado en metrados cuenta con un presupuesto global de <b>${total}</b>. Las cantidades de tablaroca y cerámica ya incluyen desperdicio técnico.`;
+    chat.innerHTML += `<br>🤖 <b>IA:</b> Consulta procesada. Recuerda que para proporciones estándar de concreto en zapatas se utiliza la mezcla 1:2:3 (1 saco cemento, 2 botes arena, 3 botes grava).`;
     
     document.getElementById('userInput').value = '';
     chat.scrollTop = chat.scrollHeight;
   }
 
-  function generarPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFontSize(16);
-    doc.setTextColor(217, 119, 6);
-    doc.text("EL MUNDO DEL CONSTRUCTOR", 14, 20);
-
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text("Reporte Técnico de Cómputo Métrico y Presupuesto", 14, 26);
-
-    doc.autoTable({
-      startY: 34,
-      head: [['Especialidad / Metrado', 'Cantidad Estimada']],
-      body: [
-        ['Área Repello', document.getElementById('metRepello').innerText],
-        ['Área Afinado', document.getElementById('metAfinado').innerText],
-        ['Tablaroca Divisoria', document.getElementById('metTablaroca').innerText],
-        ['Enchapado Cerámica', document.getElementById('metCeramica').innerText],
-        ['Estructura Metálica', document.getElementById('metEstructuraMetal').innerText],
-        ['Zapatas Aisladas', document.getElementById('metZapatas').innerText],
-        ['PRESUPUESTO TOTAL', document.getElementById('resTotal').innerText]
-      ],
-      theme: 'grid',
-      headStyles: { fillColor: [217, 119, 6] }
-    });
-
-    doc.save(`Metrados_Presupuesto_${Date.now()}.pdf`);
-  }
-
   window.onload = function() {
     init3D();
     calcularTodo();
+    calcRepello();
+    calcTablaroca();
+    calcCeramica();
+    calcTecho();
+    calcZapatas();
   };
 </script>
 
