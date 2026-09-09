@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>El Mundo del Constructor - Suite Modular de Ingeniería</title>
+  <title>El Mundo del Constructor - Suite Modular Global</title>
   
   <!-- Carga de Librerías -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -45,7 +45,6 @@
     header h1 { font-size: 1.25rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-gold); }
     header p { font-size: 0.8rem; color: var(--text-muted); }
 
-    /* PESTAÑAS DE NAVEGACIÓN MODULAR */
     .nav-tabs {
       display: flex;
       gap: 8px;
@@ -181,21 +180,36 @@
   <header>
     <div>
       <h1>El Mundo del Constructor</h1>
-      <p>Suite Modular Independiente para Análisis, Diseño 3D y Cómputo de Materiales</p>
+      <p>Suite Profesional con Calculadoras Adaptables, Estructuras y Divisa Global</p>
+    </div>
+    <!-- SELECTOR DE DIVISA Y PAÍS -->
+    <div style="min-width: 180px;">
+      <label style="font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Moneda / País:</label>
+      <select id="monedaSelect" class="form-control" onchange="cambiarMoneda()">
+        <option value="USD" data-simbolo="$" data-tasa="1.0">🇺🇸 USD ($)</option>
+        <option value="MXN" data-simbolo="$" data-tasa="18.0">🇲🇽 MXN - México ($)</option>
+        <option value="GTQ" data-simbolo="Q" data-tasa="7.7">🇬🇹 GTQ - Guatemala (Q)</option>
+        <option value="HNL" data-simbolo="L" data-tasa="24.8">🇭🇳 HNL - Honduras (L)</option>
+        <option value="CRC" data-simbolo="₡" data-tasa="515.0">🇨🇷 CRC - Costa Rica (₡)</option>
+        <option value="COP" data-simbolo="$" data-tasa="3900.0">🇨🇴 COP - Colombia ($)</option>
+        <option value="PEN" data-simbolo="S/" data-tasa="3.75">🇵🇪 PEN - Perú (S/)</option>
+        <option value="EUR" data-simbolo="€" data-tasa="0.92">🇪🇺 EUR - Europa (€)</option>
+      </select>
     </div>
   </header>
 
   <!-- PESTAÑAS DE NAVEGACIÓN -->
   <div class="nav-tabs">
-    <button class="tab-btn active" onclick="cambiarPestana('tabCasa', this)">🏠 Proyecto de Casa & 3D</button>
+    <button class="tab-btn active" onclick="cambiarPestana('tabCasa', this)">🏠 Proyecto Casa & 3D</button>
+    <button class="tab-btn" onclick="cambiarPestana('tabEstructuras', this)">🏢 Vigas y Columnas (Estribos & Resistencia)</button>
     <button class="tab-btn" onclick="cambiarPestana('tabRepello', this)">🧱 Repello y Afinado</button>
     <button class="tab-btn" onclick="cambiarPestana('tabTablaroca', this)">📐 Tablaroca / Sheetrock</button>
     <button class="tab-btn" onclick="cambiarPestana('tabCeramica', this)">🧱 Cerámica y Pisos</button>
-    <button class="tab-btn" onclick="cambiarPestana('tabTechos', this)">🏗️ Estructura Metálica / Techo</button>
-    <button class="tab-btn" onclick="cambiarPestana('tabZapatas', this)">🏛️ Zapatas y Concreto</button>
+    <button class="tab-btn" onclick="cambiarPestana('tabTechos', this)">🏗️ Estructura Techos / Farmhouse</button>
+    <button class="tab-btn" onclick="cambiarPestana('tabZapatas', this)">🏛️ Zapatas y Cimentación</button>
   </div>
 
-  <!-- PESTAÑA 1: DISEÑO COMPLETO DE CASAS & 3D -->
+  <!-- PESTAÑA 1: CASA 3D Y MANO DE OBRA EDITABLE -->
   <div id="tabCasa" class="tab-content active">
     <div class="main-grid">
       <div class="card">
@@ -220,7 +234,7 @@
         </div>
         <input type="file" id="fileInput" accept="image/*,application/pdf" style="display:none" onchange="procesarArchivoSubido(event)">
 
-        <div class="card-title">3. Parámetros del Terreno</div>
+        <div class="card-title">3. Parámetros del Terreno y Costos</div>
         <div class="form-group">
           <label>Frente / Ancho (m)</label>
           <input type="number" id="ancho" class="form-control" value="8.0" step="0.5" oninput="calcularTodo()">
@@ -230,8 +244,8 @@
           <input type="number" id="largo" class="form-control" value="12.0" step="0.5" oninput="calcularTodo()">
         </div>
         <div class="form-group">
-          <label>Mano de Obra ($/m²)</label>
-          <input type="number" id="pManoObra" class="form-control" value="11.00" step="0.5" oninput="calcularTodo()">
+          <label>Mano de Obra Global por m²</label>
+          <input type="number" id="pManoObra" class="form-control" value="12.00" step="0.5" oninput="calcularTodo()">
         </div>
       </div>
 
@@ -244,11 +258,11 @@
         <div class="card">
           <div class="card-title">Presupuesto General Proyectado</div>
           <table>
-            <thead><tr><th>Concepto</th><th class="text-right">Monto ($)</th></tr></thead>
+            <thead><tr><th>Concepto</th><th class="text-right">Monto Estimado</th></tr></thead>
             <tbody>
               <tr><td>Área Total Construcción</td><td class="text-right" id="resArea">0.00 m²</td></tr>
               <tr><td>Insumos y Estructura Global</td><td class="text-right" id="resMateriales">$0.00</td></tr>
-              <tr><td>Mano de Obra Directa</td><td class="text-right" id="resManoObra">$0.00</td></tr>
+              <tr><td>Mano de Obra Calculada</td><td class="text-right" id="resManoObra">$0.00</td></tr>
             </tbody>
           </table>
           <div class="total-badge" id="resTotal">$0.00</div>
@@ -257,7 +271,65 @@
     </div>
   </div>
 
-  <!-- PESTAÑA 2: REPELLO Y AFINADO -->
+  <!-- PESTAÑA NUEVA: VIGAS & COLUMNAS (ESTRIBOS + RESISTENCIA) -->
+  <div id="tabEstructuras" class="tab-content">
+    <div class="grid-calc">
+      <div class="card">
+        <div class="card-title">📐 Geometría y Armado de Elemento</div>
+        <div class="form-group">
+          <label>Tipo de Elemento</label>
+          <select id="estTipo" class="form-control" onchange="calcEstructura()">
+            <option value="columna">Columna de Concreto</option>
+            <option value="viga">Viga de Carga / Amarre</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Ancho Sección b (cm)</label><input type="number" id="estAncho" class="form-control" value="30" oninput="calcEstructura()"></div>
+        <div class="form-group"><label>Alto / Profundidad h (cm)</label><input type="number" id="estAlto" class="form-control" value="30" oninput="calcEstructura()"></div>
+        <div class="form-group"><label>Longitud / Altura del Elemento L (m)</label><input type="number" id="estLongitud" class="form-control" value="3.5" step="0.1" oninput="calcEstructura()"></div>
+        <div class="form-group"><label>Recubrimiento de Concreto (cm)</label><input type="number" id="estRecubrimiento" class="form-control" value="2.5" step="0.5" oninput="calcEstructura()"></div>
+        
+        <div class="card-title" style="margin-top:12px;">🔩 Configuración de Estribos (Anillos)</div>
+        <div class="form-group">
+          <label>Calibre de Estribo</label>
+          <select id="estCalibre" class="form-control" onchange="calcEstructura()">
+            <option value="2">N° 2 (1/4" - 6mm)</option>
+            <option value="3">N° 3 (3/8" - 9.5mm)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Separación Zona Confinada s1 (cm)</label><input type="number" id="estSepConf" class="form-control" value="10" oninput="calcEstructura()"></div>
+        <div class="form-group"><label>Separación Zona Central s2 (cm)</label><input type="number" id="estSepCentro" class="form-control" value="20" oninput="calcEstructura()"></div>
+
+        <div class="card-title" style="margin-top:12px;">💪 Parámetros de Resistencia Structural</div>
+        <div class="form-group"><label>Resistencia Concreto f'c (kg/cm²)</label><input type="number" id="estFc" class="form-control" value="210" step="10" oninput="calcEstructura()"></div>
+        <div class="form-group"><label>Varillas Longitudinales (Cantidad y Calibre)</label>
+          <select id="estVarillasLong" class="form-control" onchange="calcEstructura()">
+            <option value="4-4">4 Varillas N° 4 (1/2")</option>
+            <option value="6-4">6 Varillas N° 4 (1/2")</option>
+            <option value="4-5">4 Varillas N° 5 (5/8")</option>
+            <option value="6-5">6 Varillas N° 5 (5/8")</option>
+            <option value="8-5">8 Varillas N° 5 (5/8")</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Mano de Obra Armado y Colado (por m³)</label><input type="number" id="estManoObraUnit" class="form-control" value="45.00" step="1.0" oninput="calcEstructura()"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 Cálculo de Estribos, Aceros y Resistencia Nominal</div>
+        <table>
+          <tbody>
+            <tr><td>Desarrollo x Estribo (con ganchos)</td><td class="text-right" id="resEstDesarrollo">0 cm</td></tr>
+            <tr><td>Total de Estribos Necesarios</td><td class="text-right" id="resEstCantidad">0 Unidades</td></tr>
+            <tr><td>Acero para Estribos (Quintales / kg)</td><td class="text-right" id="resEstPeso">0.00 qq</td></tr>
+            <tr><td>Volumen Concreto Elemento</td><td class="text-right" id="resEstVolumen">0.00 m³</td></tr>
+            <tr><td style="color:var(--accent-gold); font-weight:700;">Capacidad Axial / Flexión Estimada</td><td class="text-right" id="resEstCapacidad" style="color:var(--accent-gold); font-weight:700;">0 Tn</td></tr>
+            <tr><td>Costo Estimado Mano de Obra</td><td class="text-right" id="resEstManoObra">$0.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESTAÑA 3: REPELLO Y AFINADO -->
   <div id="tabRepello" class="tab-content">
     <div class="grid-calc">
       <div class="card">
@@ -265,26 +337,28 @@
         <div class="form-group"><label>Largo Muro (m)</label><input type="number" id="repLargo" class="form-control" value="10" oninput="calcRepello()"></div>
         <div class="form-group"><label>Alto Muro (m)</label><input type="number" id="repAlto" class="form-control" value="2.8" oninput="calcRepello()"></div>
         <div class="form-group"><label>Grosor Capa (cm)</label><input type="number" id="repGrosor" class="form-control" value="1.5" step="0.1" oninput="calcRepello()"></div>
+        <div class="form-group"><label>Mano de Obra por m²</label><input type="number" id="repManoObraUnit" class="form-control" value="3.50" step="0.25" oninput="calcRepello()"></div>
       </div>
       <div class="card">
-        <div class="card-title">📊 Materiales Necesarios para Repello</div>
+        <div class="card-title">📊 Materiales y Presupuesto</div>
         <table>
           <tbody>
             <tr><td>Área Muro</td><td class="text-right" id="rArea">0.00 m²</td></tr>
             <tr><td>Bolsas Cemento (42.5kg)</td><td class="text-right" id="rCemento">0 Bolsas</td></tr>
-            <tr><td>Arena fina/colada</td><td class="text-right" id="rArena">0.00 m³</td></tr>
-            <tr><td>Agua estimada</td><td class="text-right" id="rAgua">0 Litros</td></tr>
+            <tr><td>Arena Fina / Colada</td><td class="text-right" id="rArena">0.00 m³</td></tr>
+            <tr><td>Agua Necesaria</td><td class="text-right" id="rAgua">0 Litros</td></tr>
+            <tr><td style="color:var(--accent-gold);">Costo Mano de Obra</td><td class="text-right" id="rManoObra">$0.00</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- PESTAÑA 3: TABLAROCA -->
+  <!-- PESTAÑA 4: TABLAROCA CON MODULACIÓN DE POSTES -->
   <div id="tabTablaroca" class="tab-content">
     <div class="grid-calc">
       <div class="card">
-        <div class="card-title">📐 Pared Divisoria de Tablaroca</div>
+        <div class="card-title">📐 Configuración de Pared Tablaroca</div>
         <div class="form-group"><label>Largo Pared (m)</label><input type="number" id="tabLargo" class="form-control" value="6" oninput="calcTablaroca()"></div>
         <div class="form-group"><label>Alto Pared (m)</label><input type="number" id="tabAlto" class="form-control" value="2.6" oninput="calcTablaroca()"></div>
         <div class="form-group"><label>Caras a Forrar</label>
@@ -293,22 +367,31 @@
             <option value="1">1 Cara (Forro/Falso)</option>
           </select>
         </div>
+        <div class="form-group"><label>Distancia entre Postes / Perfiles</label>
+          <select id="tabDistancia" class="form-control" onchange="calcTablaroca()">
+            <option value="0.406">40.6 cm (16" - Estándar Estructural)</option>
+            <option value="0.606">60.6 cm (24" - Ligero / Divisorio)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Mano de Obra Inst. por m²</label><input type="number" id="tabManoObraUnit" class="form-control" value="4.50" step="0.5" oninput="calcTablaroca()"></div>
       </div>
       <div class="card">
-        <div class="card-title">📊 Insumos de Sistema Liviano</div>
+        <div class="card-title">📊 Insumos y Presupuesto</div>
         <table>
           <tbody>
             <tr><td>Láminas (1.22x2.44m)</td><td class="text-right" id="tLaminas">0 Láminas</td></tr>
-            <tr><td>Postes/Canales Metálicos</td><td class="text-right" id="tPerfiles">0 Unidades</td></tr>
+            <tr><td>Postes / Perfiles Verticales</td><td class="text-right" id="tPerfiles">0 Unidades</td></tr>
+            <tr><td>Canales de Amarre (Base/Techo)</td><td class="text-right" id="tCanales">0 Unidades</td></tr>
             <tr><td>Tornillos Punta Broca</td><td class="text-right" id="tTornillos">0 Unidades</td></tr>
-            <tr><td>Cinta y Masilla / Paste</td><td class="text-right" id="tPaste">0 Cubetas</td></tr>
+            <tr><td>Masilla / Paste</td><td class="text-right" id="tPaste">0 Cubetas</td></tr>
+            <tr><td style="color:var(--accent-gold);">Costo Mano de Obra</td><td class="text-right" id="tManoObra">$0.00</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- PESTAÑA 4: CERÁMICA Y PISOS -->
+  <!-- PESTAÑA 5: CERÁMICA Y PISOS -->
   <div id="tabCeramica" class="tab-content">
     <div class="grid-calc">
       <div class="card">
@@ -316,44 +399,57 @@
         <div class="form-group"><label>Largo Área (m)</label><input type="number" id="cerLargo" class="form-control" value="5" oninput="calcCeramica()"></div>
         <div class="form-group"><label>Ancho Área (m)</label><input type="number" id="cerAncho" class="form-control" value="4" oninput="calcCeramica()"></div>
         <div class="form-group"><label>Margen Desperdicio (%)</label><input type="number" id="cerDesperdicio" class="form-control" value="10" oninput="calcCeramica()"></div>
+        <div class="form-group"><label>Mano de Obra Pegado por m²</label><input type="number" id="cerManoObraUnit" class="form-control" value="5.00" step="0.5" oninput="calcCeramica()"></div>
       </div>
       <div class="card">
-        <div class="card-title">📊 Materiales de Piso</div>
+        <div class="card-title">📊 Materiales y Presupuesto</div>
         <table>
           <tbody>
             <tr><td>Área Neta + Desperdicio</td><td class="text-right" id="cArea">0.00 m²</td></tr>
-            <tr><td>Cajas de Cerámica (aprox 1.44m²/caja)</td><td class="text-right" id="cCajas">0 Cajas</td></tr>
-            <tr><td>Sacos Pega-Azulejo / Pega-Cerámica</td><td class="text-right" id="cSacos">0 Sacos (20kg)</td></tr>
+            <tr><td>Cajas de Cerámica (aprox 1.44m²)</td><td class="text-right" id="cCajas">0 Cajas</td></tr>
+            <tr><td>Sacos Pega-Azulejo (20kg)</td><td class="text-right" id="cSacos">0 Sacos</td></tr>
             <tr><td>Fragua / Porcelanato</td><td class="text-right" id="cFragua">0 kg</td></tr>
+            <tr><td style="color:var(--accent-gold);">Costo Mano de Obra</td><td class="text-right" id="cManoObra">$0.00</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- PESTAÑA 5: ESTRUCTURA METÁLICA Y TECHOS -->
+  <!-- PESTAÑA 6: TECHOS Y ESTILOS DE CUBIERTA -->
   <div id="tabTechos" class="tab-content">
     <div class="grid-calc">
       <div class="card">
-        <div class="card-title">🏗️ Cubierta / Techo</div>
-        <div class="form-group"><label>Largo Techo (m)</label><input type="number" id="tecLargo" class="form-control" value="8" oninput="calcTecho()"></div>
-        <div class="form-group"><label>Ancho Techo (m)</label><input type="number" id="tecAncho" class="form-control" value="6" oninput="calcTecho()"></div>
-        <div class="form-group"><label>Distancia entre Polines/Costaneras (m)</label><input type="number" id="tecSeparacion" class="form-control" value="0.9" step="0.1" oninput="calcTecho()"></div>
+        <div class="card-title">🏗️ Estilo y Geometría del Techo</div>
+        <div class="form-group"><label>Estilo de Cubierta</label>
+          <select id="tecEstilo" class="form-control" onchange="calcTecho()">
+            <option value="1">Techo a 1 Agua (Inclinado Sencillo)</option>
+            <option value="2">Techo a 2 Aguas (A Dos Caídas)</option>
+            <option value="4">Techo a 3 o 4 Aguas / Farmhouse (Premium)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Largo Base Techo (m)</label><input type="number" id="tecLargo" class="form-control" value="8" oninput="calcTecho()"></div>
+        <div class="form-group"><label>Ancho Base Techo (m)</label><input type="number" id="tecAncho" class="form-control" value="6" oninput="calcTecho()"></div>
+        <div class="form-group"><label>Separación entre Polines/Costaneras (m)</label><input type="number" id="tecSeparacion" class="form-control" value="0.9" step="0.1" oninput="calcTecho()"></div>
+        <div class="form-group"><label>Mano de Obra Montaje por m²</label><input type="number" id="tecManoObraUnit" class="form-control" value="6.00" step="0.5" oninput="calcTecho()"></div>
       </div>
       <div class="card">
-        <div class="card-title">📊 Materiales de Estructura Metálica</div>
+        <div class="card-title">📊 Materiales y Presupuesto</div>
         <table>
           <tbody>
-            <tr><td>Láminas de Techo (Zinc/Aluzinc)</td><td class="text-right" id="tecLaminas">0 Unidades</td></tr>
-            <tr><td>Polines / Costaneras C (6 metros)</td><td class="text-right" id="tecPolines">0 Unidades</td></tr>
+            <tr><td>Área Real de Cubierta (faldones)</td><td class="text-right" id="tecAreaReal">0.00 m²</td></tr>
+            <tr><td>Láminas de Techo</td><td class="text-right" id="tecLaminas">0 Unidades</td></tr>
+            <tr><td>Polines C / Costaneras (6m)</td><td class="text-right" id="tecPolines">0 Unidades</td></tr>
+            <tr><td>Caballetes / Cumbreras</td><td class="text-right" id="tecCumbrera">0 Metros</td></tr>
             <tr><td>Tornillos Polser / Capuchones</td><td class="text-right" id="tecTornillos">0 Unidades</td></tr>
+            <tr><td style="color:var(--accent-gold);">Costo Mano de Obra</td><td class="text-right" id="tecManoObra">$0.00</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- PESTAÑA 6: ZAPATAS Y CONCRETO -->
+  <!-- PESTAÑA 7: ZAPATAS Y CONCRETO -->
   <div id="tabZapatas" class="tab-content">
     <div class="grid-calc">
       <div class="card">
@@ -362,30 +458,32 @@
         <div class="form-group"><label>Largo Zapata (m)</label><input type="number" id="zapLargo" class="form-control" value="1.0" step="0.1" oninput="calcZapatas()"></div>
         <div class="form-group"><label>Ancho Zapata (m)</label><input type="number" id="zapAncho" class="form-control" value="1.0" step="0.1" oninput="calcZapatas()"></div>
         <div class="form-group"><label>Espesor / Alto (m)</label><input type="number" id="zapAlto" class="form-control" value="0.3" step="0.05" oninput="calcZapatas()"></div>
+        <div class="form-group"><label>Mano de Obra por Zapata (Unidad)</label><input type="number" id="zapManoObraUnit" class="form-control" value="25.00" step="2.5" oninput="calcZapatas()"></div>
       </div>
       <div class="card">
-        <div class="card-title">📊 Concreto y Varillas de Hierro</div>
+        <div class="card-title">📊 Materiales y Presupuesto</div>
         <table>
           <tbody>
             <tr><td>Volumen Total Concreto</td><td class="text-right" id="zVolumen">0.00 m³</td></tr>
-            <tr><td>Sacos Cemento (Proporción 1:2:3)</td><td class="text-right" id="zCemento">0 Sacos</td></tr>
+            <tr><td>Sacos Cemento (1:2:3)</td><td class="text-right" id="zCemento">0 Sacos</td></tr>
             <tr><td>Arena de Río</td><td class="text-right" id="zArena">0.00 m³</td></tr>
             <tr><td>Grava / Triturado</td><td class="text-right" id="zGrava">0.00 m³</td></tr>
-            <tr><td>Varillas Hierro 3/8" o 1/2" (6m)</td><td class="text-right" id="zVarillas">0 Varillas</td></tr>
+            <tr><td>Varillas Hierro (6m)</td><td class="text-right" id="zVarillas">0 Varillas</td></tr>
+            <tr><td style="color:var(--accent-gold);">Costo Mano de Obra</td><td class="text-right" id="zManoObra">$0.00</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- ASISTENTE TÉCNICO FLOTANTE -->
+  <!-- ASISTENTE TÉCNICO -->
   <div class="card">
-    <div class="card-title">💬 Asistente Técnico y Consultas</div>
+    <div class="card-title">💬 Asistente Técnico</div>
     <div class="form-group">
-      <input type="text" id="userInput" class="form-control" placeholder="Consulta proporciones de mezcla o dudas de metrados..." onkeypress="if(event.key==='Enter') consultarIA()">
+      <input type="text" id="userInput" class="form-control" placeholder="Consulta sobre materiales, estribos o mano de obra..." onkeypress="if(event.key==='Enter') consultarIA()">
     </div>
     <div class="chat-box" id="chatOutput">
-      🤖 <b>Asistente Listo:</b> Navega entre las pestañas superiores para utilizar cada calculadora independiente.
+      🤖 <b>Asistente Operativo:</b> Todos los módulos cuentan ahora con cálculo de mano de obra en tu moneda seleccionada y hemos activado el analizador estructural de vigas y columnas.
     </div>
   </div>
 </div>
@@ -394,7 +492,45 @@
   let scene, camera, renderer, modeloActual;
   let tipoPlanoSeleccionado = '1piso';
 
-  /* CAMBIO DE PESTAÑAS */
+  /* SISTEMA DE DIVISA Y MONEDA GLOBAL */
+  let simboloMoneda = "$";
+  let tasaCambio = 1.0;
+
+  function cambiarMoneda() {
+    const select = document.getElementById('monedaSelect');
+    const option = select.options[select.selectedIndex];
+    
+    simboloMoneda = option.getAttribute('data-simbolo');
+    tasaCambio = parseFloat(option.getAttribute('data-tasa')) || 1.0;
+
+    // Actualizar tarifas sugeridas de mano de obra según moneda
+    document.getElementById('pManoObra').value = (12 * tasaCambio).toFixed(2);
+    document.getElementById('estManoObraUnit').value = (45 * tasaCambio).toFixed(2);
+    document.getElementById('repManoObraUnit').value = (3.5 * tasaCambio).toFixed(2);
+    document.getElementById('tabManoObraUnit').value = (4.5 * tasaCambio).toFixed(2);
+    document.getElementById('cerManoObraUnit').value = (5.0 * tasaCambio).toFixed(2);
+    document.getElementById('tecManoObraUnit').value = (6.0 * tasaCambio).toFixed(2);
+    document.getElementById('zapManoObraUnit').value = (25.0 * tasaCambio).toFixed(2);
+
+    calcularTodo();
+    calcEstructura();
+    calcRepello();
+    calcTablaroca();
+    calcCeramica();
+    calcTecho();
+    calcZapatas();
+  }
+
+  function formatearMonedaLocal(montoLocal) {
+    return `${simboloMoneda} ${montoLocal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  function formatearMonedaUSD(montoUSD) {
+    const valorConvertido = montoUSD * tasaCambio;
+    return formatearMonedaLocal(valorConvertido);
+  }
+
+  /* PESTAÑAS */
   function cambiarPestana(idPestana, btn) {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -407,7 +543,7 @@
     }
   }
 
-  /* MÓDULO 1: CASAS Y 3D */
+  /* MÓDULO 1: CASAS & 3D */
   function init3D() {
     const container = document.getElementById('viewport3d');
     if (!container || container.clientWidth === 0) return;
@@ -472,7 +608,7 @@
   function calcularTodo() {
     const ancho = parseFloat(document.getElementById('ancho').value) || 0;
     const largo = parseFloat(document.getElementById('largo').value) || 0;
-    const pManoObra = parseFloat(document.getElementById('pManoObra').value) || 0;
+    const pManoObraInput = parseFloat(document.getElementById('pManoObra').value) || 0;
 
     let niveles = 1;
     if (tipoPlanoSeleccionado === '2pisos') niveles = 2;
@@ -481,90 +617,201 @@
     const areaPlanta = ancho * largo;
     const areaTotalConstruccion = areaPlanta * niveles;
 
-    const totalMateriales = areaPlanta * 24.5;
-    const totalManoObra = areaTotalConstruccion * pManoObra;
-    const granTotal = totalMateriales + totalManoObra;
+    const totalMaterialesUSD = areaTotalConstruccion * 220; // Estimación base
+    const totalManoObraLocal = areaTotalConstruccion * pManoObraInput;
+    const totalManoObraUSD = totalManoObraLocal / tasaCambio;
+
+    const granTotalUSD = totalMaterialesUSD + totalManoObraUSD;
 
     document.getElementById('resArea').innerText = `${areaTotalConstruccion.toFixed(2)} m²`;
-    document.getElementById('resMateriales').innerText = `$${totalMateriales.toFixed(2)}`;
-    document.getElementById('resManoObra').innerText = `$${totalManoObra.toFixed(2)}`;
-    document.getElementById('resTotal').innerText = `$${granTotal.toFixed(2)}`;
+    document.getElementById('resMateriales').innerText = formatearMonedaUSD(totalMaterialesUSD);
+    document.getElementById('resManoObra').innerText = formatearMonedaLocal(totalManoObraLocal);
+    document.getElementById('resTotal').innerText = formatearMonedaUSD(granTotalUSD);
 
     actualizarModelo3D();
   }
 
-  /* CALCULADORAS INDEPENDIENTES */
+  /* NUEVO MÓDULO: VIGAS Y COLUMNAS (ESTRIBOS & RESISTENCIA) */
+  function calcEstructura() {
+    const tipo = document.getElementById('estTipo').value;
+    const b = (parseFloat(document.getElementById('estAncho').value) || 30) / 100; // a metros
+    const h = (parseFloat(document.getElementById('estAlto').value) || 30) / 100; // a metros
+    const L = parseFloat(document.getElementById('estLongitud').value) || 3.5;
+    const rec = (parseFloat(document.getElementById('estRecubrimiento').value) || 2.5) / 100; // a metros
+
+    const calEstribo = document.getElementById('estCalibre').value;
+    const s1 = (parseFloat(document.getElementById('estSepConf').value) || 10) / 100;
+    const s2 = (parseFloat(document.getElementById('estSepCentro').value) || 20) / 100;
+    const fc = parseFloat(document.getElementById('estFc').value) || 210;
+    const varillasSel = document.getElementById('estVarillasLong').value.split('-');
+    const cantVarillas = parseInt(varillasSel[0]);
+    const numVarilla = parseInt(varillasSel[1]);
+    const moUnit = parseFloat(document.getElementById('estManoObraUnit').value) || 0;
+
+    // 1. Desarrollo de 1 Estribo
+    const bNúcleo = Math.max(0.05, b - (2 * rec));
+    const hNúcleo = Math.max(0.05, h - (2 * rec));
+    const ganchos = 0.15; // 15 cm acumulados de ganchos de 135 deg
+    const desEstriboM = (2 * bNúcleo) + (2 * hNúcleo) + ganchos;
+
+    // 2. Cantidad de Estribos (Zonas de Confinamiento ACI)
+    const zConfinada = Math.min(L / 3, Math.max(0.45, h)); // zona de confinamiento en cada extremo
+    const zCentral = Math.max(0, L - (2 * zConfinada));
+    
+    const cantEstConf = Math.ceil(zConfinada / s1) * 2;
+    const cantEstCentral = Math.ceil(zCentral / s2);
+    const totalEstribos = cantEstConf + cantEstCentral + 1;
+
+    // 3. Peso de acero de estribos
+    const mTotalesEstribo = totalEstribos * desEstriboM;
+    const pesoPorMetro = (calEstribo === "2") ? 0.25 : 0.56; // kg/m para N°2 y N°3
+    const pesoTotalKg = mTotalesEstribo * pesoPorMetro;
+    const pesoTotalQQ = pesoTotalKg / 45.36; // Quintales
+
+    // 4. Volumen y Mano de Obra
+    const volConcreto = b * h * L;
+    const costoManoObra = volConcreto * moUnit;
+
+    // 5. Cálculo de Resistencia Nominal Estimada (ACI)
+    // Áreas de acero según N° varilla en cm2
+    const areaVarillaCm2 = (numVarilla === 4) ? 1.27 : 1.98;
+    const As = cantVarillas * areaVarillaCm2; // cm2
+    const Ag = (b * 100) * (h * 100); // cm2
+    const fy = 4200; // kg/cm2
+
+    let resistenciaTexto = "";
+
+    if (tipo === "columna") {
+      // Resistencia Nominal Axial Pn = 0.85 * f'c * (Ag - As) + fy * As
+      const PnKg = 0.80 * ( (0.85 * fc * (Ag - As)) + (fy * As) );
+      const PnTn = PnKg / 1000;
+      resistenciaTexto = `${PnTn.toFixed(1)} Tn (Axial)`;
+    } else {
+      // Resistencia a Flexión Mn = As * fy * (d - a/2)
+      const d = (h * 100) - 4; // peralte efectivo aprox
+      const a = (As * fy) / (0.85 * fc * (b * 100));
+      const MnKgCm = As * fy * (d - (a / 2));
+      const MnTnM = MnKgCm / 100000;
+      resistenciaTexto = `${MnTnM.toFixed(1)} Tn-m (Flexión)`;
+    }
+
+    document.getElementById('resEstDesarrollo').innerText = `${(desEstriboM * 100).toFixed(0)} cm`;
+    document.getElementById('resEstCantidad').innerText = `${totalEstribos} Unidades`;
+    document.getElementById('resEstPeso').innerText = `${pesoTotalQQ.toFixed(2)} qq (${pesoTotalKg.toFixed(1)} kg)`;
+    document.getElementById('resEstVolumen').innerText = `${volConcreto.toFixed(2)} m³`;
+    document.getElementById('resEstCapacidad').innerText = resistenciaTexto;
+    document.getElementById('resEstManoObra').innerText = formatearMonedaLocal(costoManoObra);
+  }
+
+  /* REPELLO */
   function calcRepello() {
     const largo = parseFloat(document.getElementById('repLargo').value) || 0;
     const alto = parseFloat(document.getElementById('repAlto').value) || 0;
     const grosorCm = parseFloat(document.getElementById('repGrosor').value) || 1.5;
+    const moUnit = parseFloat(document.getElementById('repManoObraUnit').value) || 0;
 
     const area = largo * alto;
     const volM3 = area * (grosorCm / 100);
     const sacosCemento = Math.ceil(volM3 * 7.5);
     const arenaM3 = (volM3 * 1.05).toFixed(2);
     const aguaL = Math.round(sacosCemento * 20);
+    const moTotal = area * moUnit;
 
     document.getElementById('rArea').innerText = `${area.toFixed(2)} m²`;
     document.getElementById('rCemento').innerText = `${sacosCemento} Bolsas`;
     document.getElementById('rArena').innerText = `${arenaM3} m³`;
     document.getElementById('rAgua').innerText = `${aguaL} Lts`;
+    document.getElementById('rManoObra').innerText = formatearMonedaLocal(moTotal);
   }
 
+  /* TABLAROCA CON MODULACIÓN */
   function calcTablaroca() {
     const largo = parseFloat(document.getElementById('tabLargo').value) || 0;
     const alto = parseFloat(document.getElementById('tabAlto').value) || 0;
     const caras = parseInt(document.getElementById('tabCaras').value) || 2;
+    const sep = parseFloat(document.getElementById('tabDistancia').value) || 0.406;
+    const moUnit = parseFloat(document.getElementById('tabManoObraUnit').value) || 0;
 
-    const area = largo * alto * caras;
-    const laminas = Math.ceil(area / (1.22 * 2.44));
-    const postes = Math.ceil((largo / 0.61) + 1);
-    const tornillos = laminas * 35;
-    const cubetasPaste = (laminas / 10).toFixed(1);
+    const areaPared = largo * alto;
+    const areaTotalForro = areaPared * caras;
+
+    const laminas = Math.ceil(areaTotalForro / (1.22 * 2.44));
+    const postes = Math.ceil((largo / sep) + 1);
+    const canales = Math.ceil((largo * 2) / 3.0);
+    const tornillos = laminas * 36;
+    const cubetasPaste = (laminas / 9).toFixed(1);
+    const moTotal = areaTotalForro * moUnit;
 
     document.getElementById('tLaminas').innerText = `${laminas} Láminas`;
-    document.getElementById('tPerfiles').innerText = `${postes} Unidades`;
+    document.getElementById('tPerfiles').innerText = `${postes} Postes`;
+    document.getElementById('tCanales').innerText = `${canales} Canales (3m)`;
     document.getElementById('tTornillos').innerText = `${tornillos} Unidades`;
     document.getElementById('tPaste').innerText = `${cubetasPaste} Cubetas`;
+    document.getElementById('tManoObra').innerText = formatearMonedaLocal(moTotal);
   }
 
+  /* CERÁMICA */
   function calcCeramica() {
     const largo = parseFloat(document.getElementById('cerLargo').value) || 0;
     const ancho = parseFloat(document.getElementById('cerAncho').value) || 0;
     const desp = parseFloat(document.getElementById('cerDesperdicio').value) || 10;
+    const moUnit = parseFloat(document.getElementById('cerManoObraUnit').value) || 0;
 
     const areaBase = largo * ancho;
     const areaTotal = areaBase * (1 + (desp / 100));
     const cajas = Math.ceil(areaTotal / 1.44);
     const sacosPega = Math.ceil(areaTotal / 4);
     const fraguaKg = (areaTotal * 0.5).toFixed(1);
+    const moTotal = areaBase * moUnit;
 
     document.getElementById('cArea').innerText = `${areaTotal.toFixed(2)} m²`;
     document.getElementById('cCajas').innerText = `${cajas} Cajas`;
     document.getElementById('cSacos').innerText = `${sacosPega} Sacos`;
     document.getElementById('cFragua').innerText = `${fraguaKg} kg`;
+    document.getElementById('cManoObra').innerText = formatearMonedaLocal(moTotal);
   }
 
+  /* TECHOS Y ESTILOS */
   function calcTecho() {
+    const estilo = parseInt(document.getElementById('tecEstilo').value) || 1;
     const largo = parseFloat(document.getElementById('tecLargo').value) || 0;
     const ancho = parseFloat(document.getElementById('tecAncho').value) || 0;
     const sep = parseFloat(document.getElementById('tecSeparacion').value) || 0.9;
+    const moUnit = parseFloat(document.getElementById('tecManoObraUnit').value) || 0;
 
-    const laminas = Math.ceil(ancho / 1.0);
+    let factorArea = 1.05;
+    let cumbreraMeters = 0;
+
+    if (estilo === 2) {
+      factorArea = 1.12;
+      cumbreraMeters = largo;
+    } else if (estilo === 4) {
+      factorArea = 1.25;
+      cumbreraMeters = largo + (ancho * 0.7);
+    }
+
+    const areaReal = (largo * ancho) * factorArea;
+    const laminas = Math.ceil(areaReal / 2.2);
     const lineasPolines = Math.ceil(largo / sep);
-    const totalPolines = Math.ceil((lineasPolines * ancho) / 6.0);
-    const tornillos = laminas * 12;
+    const totalPolines = Math.ceil((lineasPolines * ancho * factorArea) / 6.0);
+    const tornillos = laminas * 14;
+    const moTotal = areaReal * moUnit;
 
+    document.getElementById('tecAreaReal').innerText = `${areaReal.toFixed(2)} m²`;
     document.getElementById('tecLaminas').innerText = `${laminas} Unidades`;
-    document.getElementById('tecPolines').innerText = `${totalPolines} Unidades (6m)`;
+    document.getElementById('tecPolines').innerText = `${totalPolines} Polines (6m)`;
+    document.getElementById('tecCumbrera').innerText = `${cumbreraMeters.toFixed(1)} m`;
     document.getElementById('tecTornillos').innerText = `${tornillos} Unidades`;
+    document.getElementById('tecManoObra').innerText = formatearMonedaLocal(moTotal);
   }
 
+  /* ZAPATAS */
   function calcZapatas() {
     const cant = parseInt(document.getElementById('zapCant').value) || 0;
     const largo = parseFloat(document.getElementById('zapLargo').value) || 0;
     const ancho = parseFloat(document.getElementById('zapAncho').value) || 0;
     const alto = parseFloat(document.getElementById('zapAlto').value) || 0;
+    const moUnit = parseFloat(document.getElementById('zapManoObraUnit').value) || 0;
 
     const volUnit = largo * ancho * alto;
     const volTotal = volUnit * cant;
@@ -572,12 +819,14 @@
     const arenaM3 = (volTotal * 0.5).toFixed(2);
     const gravaM3 = (volTotal * 0.7).toFixed(2);
     const varillas = cant * 8;
+    const moTotal = cant * moUnit;
 
     document.getElementById('zVolumen').innerText = `${volTotal.toFixed(2)} m³`;
     document.getElementById('zCemento').innerText = `${sacosCemento} Sacos`;
     document.getElementById('zArena').innerText = `${arenaM3} m³`;
     document.getElementById('zGrava').innerText = `${gravaM3} m³`;
     document.getElementById('zVarillas').innerText = `${varillas} Varillas`;
+    document.getElementById('zManoObra').innerText = formatearMonedaLocal(moTotal);
   }
 
   function procesarArchivoSubido(event) {
@@ -625,7 +874,7 @@
 
     const chat = document.getElementById('chatOutput');
     chat.innerHTML += `<br><br><b>Tú:</b> ${txt}`;
-    chat.innerHTML += `<br>🤖 <b>IA:</b> Consulta procesada. Recuerda que para proporciones estándar de concreto en zapatas se utiliza la mezcla 1:2:3 (1 saco cemento, 2 botes arena, 3 botes grava).`;
+    chat.innerHTML += `<br>🤖 <b>IA:</b> Entendido. Recuerda que los estribos y la capacidad axial/flexión se ajustan en tiempo real en la nueva pestaña de Vigas y Columnas.`;
     
     document.getElementById('userInput').value = '';
     chat.scrollTop = chat.scrollHeight;
@@ -634,6 +883,7 @@
   window.onload = function() {
     init3D();
     calcularTodo();
+    calcEstructura();
     calcRepello();
     calcTablaroca();
     calcCeramica();
