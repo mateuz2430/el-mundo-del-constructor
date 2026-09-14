@@ -64,7 +64,8 @@
     <!-- PORTADA Y ACCIONES RÁPIDAS -->
     <section class="max-w-7xl mx-auto p-4 my-2">
         <div class="relative w-full h-56 sm:h-72 rounded-2xl overflow-hidden border border-brandGold/30 shadow-2xl">
-            <img src="18853.png" alt="El Mundo del Constructor Portada" class="w-full h-full object-cover">
+            <!-- Imagen de Portada fija desde URL web -->
+            <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=1200&q=80" alt="El Mundo del Constructor Portada" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-brandDark via-brandDark/50 to-transparent flex flex-col justify-end p-6">
                 <span class="bg-brandGold text-black text-[10px] font-black uppercase px-2 py-0.5 rounded w-max mb-2">Plataforma Integral de Ingeniería</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-brandGold uppercase tracking-wider">Módulos Técnicos y Almacenamiento Pro</h2>
@@ -222,26 +223,27 @@
         let usuarioActual = localStorage.getItem('mc_usuario') || null;
         let datosOrden = {};
 
+        // LISTA DE MÓDULOS CON IMÁGENES ESPECÍFICAS DE SU ÁREA CORRESPONDIENTE
         const modulosList = [
-            { id: 1, title: "Excavación y Relleno", img: "18851.png" },
-            { id: 2, title: "Cimientos y Zapatas", img: "18851.png" },
-            { id: 3, title: "Losa", img: "18851.png" },
-            { id: 4, title: "Vigas", img: "18851.png" },
-            { id: 5, title: "Acabados (Paredes y Repello)", img: "18851.png" },
-            { id: 6, title: "Tablaroca", img: "18851.png" },
-            { id: 7, title: "Instalaciones PVC", img: "18851.png" },
-            { id: 8, title: "Pisos y Cerámicas", img: "18851.png" },
-            { id: 9, title: "Pintura", img: "18851.png" },
-            { id: 10, title: "Escaleras", img: "18851.png" },
-            { id: 11, title: "Presupuestos y Cotizaciones", img: "18851.png" },
-            { id: 12, title: "Guía de Aprendizaje", img: "18851.png" },
-            { id: 13, title: "Guía para Emprender", img: "18851.png" },
-            { id: 14, title: "Constructor Futurista", img: "18851.png" },
-            { id: 15, title: "Sostenibilidad y Verde", img: "18851.png" },
-            { id: 16, title: "Seguridad en la Obra", img: "18851.png" },
-            { id: 17, title: "Herramientas y Maquinaria", img: "18851.png" },
-            { id: 18, title: "Normativas y Reglamentos", img: "18851.png" },
-            { id: 19, title: "Comunidad y Soporte", img: "18851.png" }
+            { id: 1, title: "Excavación y Relleno", img: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=600&q=80" },
+            { id: 2, title: "Cimientos y Zapatas", img: "https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?auto=format&fit=crop&w=600&q=80" },
+            { id: 3, title: "Losa", img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80" },
+            { id: 4, title: "Vigas y Columnas", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" },
+            { id: 5, title: "Acabados (Paredes y Repello)", img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80" },
+            { id: 6, title: "Tablaroca y Cielos", img: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=600&q=80" },
+            { id: 7, title: "Instalaciones PVC", img: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=600&q=80" },
+            { id: 8, title: "Pisos y Cerámicas", img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" },
+            { id: 9, title: "Pintura", img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80" },
+            { id: 10, title: "Escaleras", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" },
+            { id: 11, title: "Presupuestos y Cotizaciones", img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80" },
+            { id: 12, title: "Guía de Aprendizaje", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=600&q=80" },
+            { id: 13, title: "Guía para Emprender", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80" },
+            { id: 14, title: "Constructor Futurista", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80" },
+            { id: 15, title: "Sostenibilidad y Verde", img: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=600&q=80" },
+            { id: 16, title: "Seguridad en la Obra", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" },
+            { id: 17, title: "Herramientas y Maquinaria", img: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" },
+            { id: 18, title: "Normativas y Reglamentos", img: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=600&q=80" },
+            { id: 19, title: "Comunidad y Soporte", img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" }
         ];
 
         const preciosBase = { bloque: 0.65, cemento: 8.50, arena: 22.00, agua: 0.01, manoObra: 6.00 };
@@ -284,8 +286,8 @@
                 card.className = "bg-brandCard border border-brandCardBorder hover:border-brandGold transition-all rounded-xl overflow-hidden cursor-pointer group shadow-lg flex flex-col";
                 card.onclick = () => abrirModal(mod.title);
                 card.innerHTML = `
-                    <div class="h-36 overflow-hidden relative">
-                        <img src="${mod.img}" alt="${mod.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="h-36 overflow-hidden relative bg-gray-900">
+                        <img src="${mod.img}" alt="${mod.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         <div class="absolute top-2 left-2 bg-black/80 border border-brandGold px-2 py-0.5 rounded text-[10px] font-bold text-brandGold">#${mod.id}</div>
                     </div>
                     <div class="p-3 flex-1 flex flex-col justify-between">
