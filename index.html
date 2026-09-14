@@ -61,13 +61,13 @@
         </div>
     </header>
 
-    <!-- PORTADA DE LA APLICACIÓN -->
+    <!-- PORTADA -->
     <section class="max-w-7xl mx-auto p-4 my-2">
         <div class="relative w-full h-56 sm:h-72 rounded-2xl overflow-hidden border border-brandGold/30 shadow-2xl">
             <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=1200&q=80" alt="El Mundo del Constructor Portada" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-brandDark via-brandDark/40 to-transparent flex flex-col justify-end p-6">
                 <span class="bg-brandGold text-black text-[10px] font-black uppercase px-2 py-0.5 rounded w-max mb-2">Plataforma Profesional de Ingeniería</span>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-brandGold uppercase tracking-wider">Cálculos Específicos, Insumos Editables y Software 3D/BIM</h2>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-brandGold uppercase tracking-wider">Desglose Detallado de Materiales y Mano de Obra Editable</h2>
             </div>
         </div>
 
@@ -124,33 +124,31 @@
         </div>
     </div>
 
-    <!-- MODAL DE CÁLCULO ESPECÍFICO DE OBRAS E INSUMOS -->
+    <!-- MODAL DE CÁLCULO E INSUMOS -->
     <div id="calcModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-brandDark border border-brandGold/40 rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
             <button onclick="cerrarModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">&times;</button>
             <div class="border-b border-brandCardBorder pb-4 mb-6">
                 <h3 id="modalTitle" class="text-2xl font-bold text-brandGold">Módulo de Cálculo</h3>
-                <p class="text-xs text-gray-400">Ingresa las medidas reales. Modifica las cantidades y los precios unitarios directamente en la tabla.</p>
+                <p class="text-xs text-gray-400">Desglose exacto de materiales y mano de obra. Puedes editar tanto las cantidades como los precios unitarios.</p>
             </div>
             
-            <!-- PARÁMETROS DINÁMICOS SEGÚN EL MÓDULO SELECCIONADO -->
+            <!-- PARÁMETROS DINÁMICOS -->
             <div class="bg-brandCard p-4 rounded-xl border border-brandCardBorder mb-6">
-                <h4 class="text-sm font-bold text-brandGoldLight uppercase mb-3 tracking-wider">1. Dimensiones y Parámetros Específicos</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" id="dynamicInputsContainer">
-                    <!-- Inputs específicos por tipo de módulo -->
-                </div>
+                <h4 class="text-sm font-bold text-brandGoldLight uppercase mb-3 tracking-wider">1. Parámetros Específicos de Obra</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" id="dynamicInputsContainer"></div>
             </div>
 
-            <!-- DESGLOSE COMPLETO DE INSUMOS CON CANTIDADES Y PRECIOS EDITABLES -->
+            <!-- DESGLOSE DE MATERIALES Y MANO DE OBRA EDITABLES -->
             <div class="bg-brandCard p-4 rounded-xl border border-brandCardBorder mb-6 overflow-x-auto">
                 <div class="flex justify-between items-center mb-3">
-                    <h4 class="text-sm font-bold text-brandGoldLight uppercase tracking-wider">2. Desglose de Insumos (Cantidades y Precios Editables)</h4>
-                    <span class="text-[10px] text-brandGold bg-black border border-brandGold/40 px-2 py-0.5 rounded">✏️ Modifica cantidad o precio unitario y el total se actualizará al instante</span>
+                    <h4 class="text-sm font-bold text-brandGoldLight uppercase tracking-wider">2. Desglose de Insumos y Mano de Obra</h4>
+                    <span class="text-[10px] text-brandGold bg-black border border-brandGold/40 px-2 py-0.5 rounded">✏️ Edita cantidad o precio y se recalcula el total</span>
                 </div>
                 <table class="w-full text-left text-xs border-collapse">
                     <thead>
                         <tr class="border-b border-gray-700 text-gray-400">
-                            <th class="py-2 px-2">Material / Insumo</th>
+                            <th class="py-2 px-2">Material / Servicio</th>
                             <th class="py-2 px-2">Especificación Técnica</th>
                             <th class="py-2 px-2 text-center">Cantidad (Editable)</th>
                             <th class="py-2 px-2 text-center">Unidad</th>
@@ -165,8 +163,8 @@
             <!-- RESUMEN Y TOTAL -->
             <div class="flex flex-col sm:flex-row justify-between items-center bg-black p-4 rounded-xl border border-brandGold/30 gap-4">
                 <div class="text-xs text-gray-400">
-                    <p class="font-bold text-brandGold">Fórmula de Cuantificación Aplicada:</p>
-                    <p id="formulaDetalle">Cálculo estructural ajustado a especificaciones reales de obra.</p>
+                    <p class="font-bold text-brandGold">Detalle de Estimación:</p>
+                    <p id="formulaDetalle">Cálculo estructural exacto ajustado al módulo.</p>
                 </div>
                 <div class="text-right">
                     <span class="text-xs text-gray-400 block">COSTO TOTAL ESTIMADO:</span>
@@ -217,10 +215,8 @@
         let moduloActual = "";
         let datosOrden = {};
 
-        // BASE DE DATOS DE INSUMOS CON CANTIDADES Y PRECIOS EDITABLES POR MÓDULO
         let insumosCalculados = [];
 
-        // PRECIOS UNITARIOS POR DEFAULT
         let preciosBase = {
             m3Excavacion: 12.00,
             m3Relleno: 18.00,
@@ -243,10 +239,16 @@
             bloqueEstructural: 0.65,
             varillaBaston: 4.80,
             alambreLbs: 1.25,
-            manoObraM2: 6.50
+            manoObraExcavacion: 8.00,
+            manoObraZapatas: 25.00,
+            manoObraLosa: 12.00,
+            manoObraVigas: 15.00,
+            manoObraRepello: 6.00,
+            manoObraTablaroca: 5.50,
+            manoObraPVC: 3.00,
+            manoObraMuro: 7.00
         };
 
-        // CATÁLOGO DE MÓDULOS CON IMÁGENES EXACTAS Y COINCIDENTES
         const modulosList = [
             { id: 1, title: "Excavación y Relleno", type: "excavacion", btnText: "Calcular Volumetría", img: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=600&q=80" },
             { id: 2, title: "Cimientos y Zapatas", type: "zapatas", btnText: "Calcular Zapatas", img: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=600&q=80" },
@@ -287,7 +289,7 @@
                     inicializarSesion();
                 }
             } else {
-                const correo = prompt("Ingrese su correo electrónico para guardar sus datos:");
+                const correo = prompt("Ingrese su correo electrónico:");
                 if (correo && correo.includes('@')) {
                     usuarioActual = correo;
                     localStorage.setItem('mc_usuario', correo);
@@ -329,72 +331,70 @@
             }
         }
 
-        // CONFIGURA PARÁMETROS ESPECÍFICOS PARA CADA MÓDULO
         function configurarCamposCalculadora(type) {
             const container = document.getElementById('dynamicInputsContainer');
             if (type === "excavacion") {
                 container.innerHTML = `
-                    <div><label class="block text-xs text-gray-300 mb-1">Largo de Zanja / Fosa (m):</label><input type="number" id="inLargo" value="10.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Ancho de Zanja (m):</label><input type="number" id="inAncho" value="0.80" step="0.05" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Largo Zanja (m):</label><input type="number" id="inLargo" value="10.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Ancho Zanja (m):</label><input type="number" id="inAncho" value="0.80" step="0.05" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
                     <div><label class="block text-xs text-gray-300 mb-1">Profundidad (m):</label><input type="number" id="inAlto" value="1.20" step="0.05" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Factor Esponjamiento:</label>
+                    <div><label class="block text-xs text-gray-300 mb-1">Esponjamiento:</label>
                         <select id="inEsponjamiento" onchange="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm">
-                            <option value="1.25">25% (Suelo arcilloso/normal)</option>
-                            <option value="1.40">40% (Suelo rocoso/compacto)</option>
+                            <option value="1.25">25% (Suelo normal)</option>
+                            <option value="1.40">40% (Roca/Compacto)</option>
                         </select>
                     </div>
                 `;
             } else if (type === "zapatas") {
                 container.innerHTML = `
-                    <div><label class="block text-xs text-gray-300 mb-1">Cantidad de Zapatas (pzas):</label><input type="number" id="inCantZapatas" value="6" step="1" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Cantidad Zapatas:</label><input type="number" id="inCantZapatas" value="6" step="1" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
                     <div><label class="block text-xs text-gray-300 mb-1">Largo Zapata (m):</label><input type="number" id="inLargoZ" value="1.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
                     <div><label class="block text-xs text-gray-300 mb-1">Ancho Zapata (m):</label><input type="number" id="inAnchoZ" value="1.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Espesor Zapata (m):</label><input type="number" id="inAltoZ" value="0.30" step="0.05" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Peralte/Espesor (m):</label><input type="number" id="inAltoZ" value="0.30" step="0.05" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
                 `;
             } else if (type === "losa") {
                 container.innerHTML = `
-                    <div><label class="block text-xs text-gray-300 mb-1">Largo de Losa (m):</label><input type="number" id="inLargoLosa" value="10.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Ancho de Losa (m):</label><input type="number" id="inAnchoLosa" value="8.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Largo Losa (m):</label><input type="number" id="inLargoLosa" value="10.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Ancho Losa (m):</label><input type="number" id="inAnchoLosa" value="8.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
                     <div><label class="block text-xs text-gray-300 mb-1">Espesor Losa (m):</label><input type="number" id="inEspesorLosa" value="0.12" step="0.01" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Tipo de Malla:</label>
+                    <div><label class="block text-xs text-gray-300 mb-1">Malla Electrosoldada:</label>
                         <select id="inTipoMalla" onchange="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm">
-                            <option value="6x6">Malla Electrosoldada 6x6 6/6</option>
-                            <option value="doble">Doble Malla de Refuerzo</option>
+                            <option value="6x6">Malla 6x6 6/6 Estándar</option>
+                            <option value="doble">Doble Malla Reforzada</option>
                         </select>
                     </div>
                 `;
             } else if (type === "vigas") {
                 container.innerHTML = `
-                    <div><label class="block text-xs text-gray-300 mb-1">Sección Base (cm):</label><input type="number" id="inBaseViga" value="30" step="5" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Peralte / Altura (cm):</label><input type="number" id="inPeralteViga" value="60" step="5" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Longitud Viga (m):</label><input type="number" id="inLargoViga" value="5.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Base Viga (cm):</label><input type="number" id="inBaseViga" value="30" step="5" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Peralte Viga (cm):</label><input type="number" id="inPeralteViga" value="60" step="5" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Longitud Total (m):</label><input type="number" id="inLargoViga" value="5.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
                     <div><label class="block text-xs text-gray-300 mb-1">Varillas Longitudinales:</label>
                         <select id="inVarillaViga" onchange="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm">
                             <option value="4-1/2">4 Varillas de 1/2"</option>
                             <option value="6-1/2">6 Varillas de 1/2"</option>
-                            <option value="4-5/8">4 Varillas de 5/8"</option>
                         </select>
                     </div>
                 `;
             } else if (type === "repello") {
                 container.innerHTML = `
-                    <div><label class="block text-xs text-gray-300 mb-1">Área a Repellar (m²):</label><input type="number" id="inAreaRepello" value="50.00" step="1" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Área Muro (m²):</label><input type="number" id="inAreaRepello" value="50.00" step="1" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
                     <div><label class="block text-xs text-gray-300 mb-1">Espesor Repello (cm):</label><input type="number" id="inEspesorRepello" value="1.50" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Tipo Acabado:</label>
+                    <div><label class="block text-xs text-gray-300 mb-1">Acabado:</label>
                         <select id="inAcabadoTipo" onchange="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm">
-                            <option value="crestuco">Repello + Crestuco / Empastado</option>
+                            <option value="crestuco">Repello + Crestuco</option>
                             <option value="fino">Repello Afinado Tradicional</option>
                         </select>
                     </div>
                 `;
             } else if (type === "tablaroca") {
                 container.innerHTML = `
-                    <div><label class="block text-xs text-gray-300 mb-1">Largo Muro / Cielo (m):</label><input type="number" id="inLargoTab" value="6.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Largo Muro (m):</label><input type="number" id="inLargoTab" value="6.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
                     <div><label class="block text-xs text-gray-300 mb-1">Altura (m):</label><input type="number" id="inAltoTab" value="2.80" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Caras Tablaroca:</label>
+                    <div><label class="block text-xs text-gray-300 mb-1">Caras:</label>
                         <select id="inCarasTab" onchange="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm">
-                            <option value="2">2 Caras (Pared Divisoria)</option>
-                            <option value="1">1 Cara (Forro / Cielo Falso)</option>
+                            <option value="2">2 Caras (Pared divisoria)</option>
+                            <option value="1">1 Cara (Cielo falso/forro)</option>
                         </select>
                     </div>
                 `;
@@ -405,16 +405,16 @@
                         <select id="inDiaPVC" onchange="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm">
                             <option value="1/2">1/2" Agua Potable (Tubo 6m)</option>
                             <option value="3/4">3/4" Agua Potable (Tubo 6m)</option>
-                            <option value="2">2" Drenaje / Ventilación (Tubo 6m)</option>
+                            <option value="2">2" Drenaje (Tubo 6m)</option>
                             <option value="4">4" Sanitario (Tubo 6m)</option>
                         </select>
                     </div>
                 `;
             } else if (type === "presupuestos") {
                 container.innerHTML = `
-                    <div><label class="block text-xs text-gray-300 mb-1">Longitud de Muro (m):</label><input type="number" id="inLargoPres" value="15.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Altura de Muro (m):</label><input type="number" id="inAltoPres" value="3.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Bloque de Concreto:</label>
+                    <div><label class="block text-xs text-gray-300 mb-1">Largo Muro (m):</label><input type="number" id="inLargoPres" value="15.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Alto Muro (m):</label><input type="number" id="inAltoPres" value="3.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Bloque Concreto:</label>
                         <select id="inAnchoBloquePres" onchange="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm">
                             <option value="15">15 x 20 x 40 cm Estructural</option>
                             <option value="20">20 x 20 x 40 cm Pesado</option>
@@ -423,20 +423,18 @@
                     <div><label class="block text-xs text-gray-300 mb-1">Espaciamiento Bastones:</label>
                         <select id="inEspaciamientoBastones" onchange="calcularInsumosEspeciales()" class="w-full bg-black border border-brandGold text-brandGold font-bold rounded p-2 text-sm">
                             <option value="0.60" selected>Cada 60 cm (0.60 m) - Estándar</option>
-                            <option value="0.40">Cada 40 cm (0.40 m) - Reforzado</option>
-                            <option value="0.80">Cada 80 cm (0.80 m)</option>
+                            <option value="0.40">Cada 40 cm (0.40 m)</option>
                         </select>
                     </div>
                 `;
             } else {
                 container.innerHTML = `
                     <div><label class="block text-xs text-gray-300 mb-1">Largo (m):</label><input type="number" id="inGenLargo" value="10.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
-                    <div><label class="block text-xs text-gray-300 mb-1">Ancho / Alto (m):</label><input type="number" id="inGenAncho" value="5.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
+                    <div><label class="block text-xs text-gray-300 mb-1">Ancho (m):</label><input type="number" id="inGenAncho" value="5.00" step="0.10" oninput="calcularInsumosEspeciales()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm"></div>
                 `;
             }
         }
 
-        // RECALCULA EL TOTAL Y ACTUALIZA UN INSUMO AL MODIFICAR SU CANTIDAD O PRECIO EN LA TABLA
         function actualizarFilaInsumo(index, campo, nuevoValor) {
             insumosCalculados[index][campo] = parseFloat(nuevoValor) || 0;
             renderizarTablaInsumos();
@@ -477,7 +475,6 @@
             };
         }
 
-        // MOTOR DE CÁLCULO CIENTÍFICO Y ESPECÍFICO
         function calcularInsumosEspeciales() {
             insumosCalculados = [];
             let detalle = "";
@@ -491,10 +488,11 @@
                 const volBanco = l * a * h;
                 const volEsponjado = volBanco * esp;
 
-                detalle = `Volumen Banco: ${volBanco.toFixed(2)} m³ | Vol. Esponjado de Desalojo: ${volEsponjado.toFixed(2)} m³`;
+                detalle = `Volumen Banco: ${volBanco.toFixed(2)} m³ | Vol. Esponjado: ${volEsponjado.toFixed(2)} m³`;
 
-                insumosCalculados.push({ nombre: "Corte y Excavación en Banco", especificacion: `Zanja de ${l}m × ${a}m × ${h}m`, cantidad: parseFloat(volBanco.toFixed(2)), unidad: "m³", precioU: preciosBase.m3Excavacion });
-                insumosCalculados.push({ nombre: "Acarreo y Relleno Compactado", especificacion: `Volumen Esponjado (${((esp-1)*100).toFixed(0)}%)`, cantidad: parseFloat(volEsponjado.toFixed(2)), unidad: "m³", precioU: preciosBase.m3Relleno });
+                insumosCalculados.push({ nombre: "Corte y Excavación Zanja", especificacion: `Medida ${l}m × ${a}m × ${h}m`, cantidad: parseFloat(volBanco.toFixed(2)), unidad: "m³", precioU: preciosBase.m3Excavacion });
+                insumosCalculados.push({ nombre: "Acarreo y Relleno Compactado", especificacion: `Material Esponjado (${((esp-1)*100).toFixed(0)}%)`, cantidad: parseFloat(volEsponjado.toFixed(2)), unidad: "m³", precioU: preciosBase.m3Relleno });
+                insumosCalculados.push({ nombre: "Mano de Obra Excavación y Desalojo", especificacion: "Jornal de excavación manual / operador", cantidad: parseFloat(volBanco.toFixed(2)), unidad: "m³", precioU: preciosBase.manoObraExcavacion });
 
             } else if (moduloActual === "presupuestos") {
                 const l = parseFloat(document.getElementById('inLargoPres').value) || 0;
@@ -503,19 +501,19 @@
                 const espBastones = parseFloat(document.getElementById('inEspaciamientoBastones').value) || 0.60;
 
                 const areaBruta = l * h;
-                const cantBloques = Math.ceil(areaBruta * 12.5 * 1.05); // 12.5 bloques por m2 + 5% merma
+                const cantBloques = Math.ceil(areaBruta * 12.5 * 1.05);
                 const sacosCemento = Math.ceil(areaBruta * 0.35);
                 const m3Arena = parseFloat((areaBruta * 0.03).toFixed(2));
-                const cantBastonesVarilla = Math.ceil((l / espBastones) + 1); // BASTONES CADA 60 CM
+                const cantBastonesVarilla = Math.ceil((l / espBastones) + 1);
 
-                detalle = `Superficie: ${areaBruta.toFixed(2)} m² | Bastones verticales cada ${espBastones*100} cm: ${cantBastonesVarilla} varillas calculadas.`;
+                detalle = `Superficie Muro: ${areaBruta.toFixed(2)} m² | Bastones verticales colocados cada ${espBastones*100} cm.`;
 
                 insumosCalculados.push({ nombre: "Bloque de Concreto Estructural", especificacion: `${anchoBloque}x20x40 cm (inc. 5% merma)`, cantidad: cantBloques, unidad: "Pzas", precioU: preciosBase.bloqueEstructural });
-                insumosCalculados.push({ nombre: "Bastones Verticales 3/8\"", especificacion: `Colocados cada ${espBastones*100} cm`, cantidad: cantBastonesVarilla, unidad: "Varillas", precioU: preciosBase.varillaBaston });
+                insumosCalculados.push({ nombre: "Bastones Verticales de Hierro 3/8\"", especificacion: `Colocados a cada ${espBastones*100} cm`, cantidad: cantBastonesVarilla, unidad: "Varillas", precioU: preciosBase.varillaBaston });
                 insumosCalculados.push({ nombre: "Cemento Portland", especificacion: "Sacos de 42.5 kg para pega", cantidad: sacosCemento, unidad: "Sacos", precioU: preciosBase.sacoCemento });
-                insumosCalculados.push({ nombre: "Arena de Río", especificacion: "Mortero de pega de bloque", cantidad: m3Arena, unidad: "m³", precioU: preciosBase.m3Arena });
-                insumosCalculados.push({ nombre: "Alambre de Amarre #18", especificacion: "Fijación de bastones y sisas", cantidad: Math.ceil(cantBastonesVarilla * 0.5), unidad: "Lbs", precioU: preciosBase.alambreLbs });
-                insumosCalculados.push({ nombre: "Mano de Obra Pegado Muro", especificacion: "Colocación y colado de bastones", cantidad: parseFloat(areaBruta.toFixed(2)), unidad: "m²", precioU: preciosBase.manoObraM2 });
+                insumosCalculados.push({ nombre: "Arena Cernida de Río", especificacion: "Mortero de pega de bloque", cantidad: m3Arena, unidad: "m³", precioU: preciosBase.m3Arena });
+                insumosCalculados.push({ nombre: "Alambre de Amarre #18", especificacion: "Fijación de acero y sisas", cantidad: Math.ceil(cantBastonesVarilla * 0.5), unidad: "Lbs", precioU: preciosBase.alambreLbs });
+                insumosCalculados.push({ nombre: "Mano de Obra Pegado de Muro", especificacion: "Colocación de bloque y colado de bastones", cantidad: parseFloat(areaBruta.toFixed(2)), unidad: "m²", precioU: preciosBase.manoObraMuro });
 
             } else if (moduloActual === "zapatas") {
                 const cant = parseFloat(document.getElementById('inCantZapatas').value) || 0;
@@ -529,8 +527,9 @@
                 detalle = `${cant} Zapatas de ${l}m × ${a}m × ${h}m | Concreto Total: ${volConcretoTotal.toFixed(2)} m³`;
 
                 insumosCalculados.push({ nombre: "Concreto Estructural f'c=210 kg/cm²", especificacion: "Vaciado de Zapatas Aisladas", cantidad: parseFloat(volConcretoTotal.toFixed(2)), unidad: "m³", precioU: preciosBase.m3Concreto });
-                insumosCalculados.push({ nombre: "Acero Parrilla Grado 60", especificacion: "Varillas de 1/2\" c/15 cm", cantidad: parseFloat(lbsAcero.toFixed(1)), unidad: "Lbs", precioU: preciosBase.lbAcero });
-                insumosCalculados.push({ nombre: "Piedra Ciclópea / Firme Base", especificacion: "Cimiento inferior de nivelación", cantidad: parseFloat((volConcretoTotal * 0.4).toFixed(2)), unidad: "m³", precioU: preciosBase.m3Piedra });
+                insumosCalculados.push({ nombre: "Acero de Refuerzo Grado 60 (Hierro)", especificacion: "Varillas 1/2\" para parrillas c/15 cm", cantidad: parseFloat(lbsAcero.toFixed(1)), unidad: "Lbs", precioU: preciosBase.lbAcero });
+                insumosCalculados.push({ nombre: "Piedra Ciclópea / Cimiento Base", especificacion: "Piedra para base de cimentación", cantidad: parseFloat((volConcretoTotal * 0.4).toFixed(2)), unidad: "m³", precioU: preciosBase.m3Piedra });
+                insumosCalculados.push({ nombre: "Mano de Obra Armado y Armaduría Zapata", especificacion: "Habilitado de acero, encofrado y vaciado", cantidad: cant, unidad: "Zapatas", precioU: preciosBase.manoObraZapatas });
 
             } else if (moduloActual === "losa") {
                 const l = parseFloat(document.getElementById('inLargoLosa').value) || 0;
@@ -541,10 +540,11 @@
                 const volConcreto = areaLosa * esp;
                 const m2Malla = areaLosa * 1.10;
 
-                detalle = `Losa de ${l}m × ${a}m (${areaLosa.toFixed(2)} m²) | Espesor: ${esp*100} cm`;
+                detalle = `Losa de ${l}m × ${a}m (${areaLosa.toFixed(2)} m²) | Concreto: ${volConcreto.toFixed(2)} m³`;
 
-                insumosCalculados.push({ nombre: "Concreto Estructural Losa", especificacion: `Peralte ${esp*100} cm f'c=210 kg/cm²`, cantidad: parseFloat(volConcreto.toFixed(2)), unidad: "m³", precioU: preciosBase.m3Concreto });
-                insumosCalculados.push({ nombre: "Electromalla de Refuerzo 6x6 6/6", especificacion: "Incluye 10% de traslape", cantidad: parseFloat(m2Malla.toFixed(2)), unidad: "m²", precioU: preciosBase.m2Electromalla });
+                insumosCalculados.push({ nombre: "Concreto Premezclado Losa", especificacion: `Espesor ${esp*100} cm f'c=210 kg/cm²`, cantidad: parseFloat(volConcreto.toFixed(2)), unidad: "m³", precioU: preciosBase.m3Concreto });
+                insumosCalculados.push({ nombre: "Electromalla de Refuerzo 6x6 6/6", especificacion: "Malla de refuerzo con 10% traslape", cantidad: parseFloat(m2Malla.toFixed(2)), unidad: "m²", precioU: preciosBase.m2Electromalla });
+                insumosCalculados.push({ nombre: "Mano de Obra Colado de Losa", especificacion: "Tendido, nivelación y curado de losa", cantidad: parseFloat(areaLosa.toFixed(2)), unidad: "m²", precioU: preciosBase.manoObraLosa });
 
             } else if (moduloActual === "vigas") {
                 const bCm = parseFloat(document.getElementById('inBaseViga').value) || 30;
@@ -556,11 +556,12 @@
                 const lbsEstribos = cantEstribos * (((bCm - 8) * 2 + (hCm - 8) * 2 + 15) / 100) * 0.25;
                 const lbsLongitudinal = largoM * 4 * 0.668;
 
-                detalle = `Viga ${bCm}x${hCm} cm | Largo: ${largoM} m | ${cantEstribos} Estribos colocados a cada 15 cm.`;
+                detalle = `Viga ${bCm}x${hCm} cm | ${cantEstribos} Estribos colocados a cada 15 cm.`;
 
                 insumosCalculados.push({ nombre: "Concreto Estructural Viga", especificacion: `Sección ${bCm}×${hCm} cm`, cantidad: parseFloat(volConcreto.toFixed(2)), unidad: "m³", precioU: preciosBase.m3Concreto });
-                insumosCalculados.push({ nombre: "Acero Longitudinal (4 Varillas 1/2\")", especificacion: "Varillas Grado 60", cantidad: parseFloat(lbsLongitudinal.toFixed(1)), unidad: "Lbs", precioU: preciosBase.lbAcero });
-                insumosCalculados.push({ nombre: "Estribos de Acero 1/4\" (Anillos)", especificacion: `${cantEstribos} estribos a cada 15 cm`, cantidad: parseFloat(lbsEstribos.toFixed(1)), unidad: "Lbs", precioU: preciosBase.lbAcero });
+                insumosCalculados.push({ nombre: "Hierro Longitudinal (4 Varillas 1/2\")", especificacion: "Acero Grado 60", cantidad: parseFloat(lbsLongitudinal.toFixed(1)), unidad: "Lbs", precioU: preciosBase.lbAcero });
+                insumosCalculados.push({ nombre: "Estribos de Hierro 1/4\" (Anillos)", especificacion: `${cantEstribos} estribos a cada 15 cm`, cantidad: parseFloat(lbsEstribos.toFixed(1)), unidad: "Lbs", precioU: preciosBase.lbAcero });
+                insumosCalculados.push({ nombre: "Mano de Obra Armado de Viga", especificacion: "Encofrado, canasta de hierro y vaciado", cantidad: largoM, unidad: "Metros", precioU: preciosBase.manoObraVigas });
 
             } else if (moduloActual === "repello") {
                 const area = parseFloat(document.getElementById('inAreaRepello').value) || 0;
@@ -570,11 +571,12 @@
                 const m3Arena = parseFloat((area * (espCm / 100) * 1.15).toFixed(2));
                 const sacosCrestuco = Math.ceil(area / 6);
 
-                detalle = `Superficie a Repellar: ${area.toFixed(2)} m² | Crestuco/Empastado: ${sacosCrestuco} sacos`;
+                detalle = `Área: ${area.toFixed(2)} m² | Crestuco: ${sacosCrestuco} sacos`;
 
                 insumosCalculados.push({ nombre: "Cemento Portland", especificacion: "Mortero fino de repello", cantidad: sacosCemento, unidad: "Sacos", precioU: preciosBase.sacoCemento });
-                insumosCalculados.push({ nombre: "Arena Cernida de Río", especificacion: "Arena fina de repello", cantidad: m3Arena, unidad: "m³", precioU: preciosBase.m3Arena });
-                insumosCalculados.push({ nombre: "Empastado / Crestuco Final", especificacion: "Sacos de 20 kg (Rend. 6 m²)", cantidad: sacosCrestuco, unidad: "Sacos", precioU: preciosBase.sacoCrestuco });
+                insumosCalculados.push({ nombre: "Arena Cernida de Río", especificacion: "Arena fina para mezcla", cantidad: m3Arena, unidad: "m³", precioU: preciosBase.m3Arena });
+                insumosCalculados.push({ nombre: "Crestuco / Empastado Acabado", especificacion: "Sacos 20 kg (Rend. 6 m²)", cantidad: sacosCrestuco, unidad: "Sacos", precioU: preciosBase.sacoCrestuco });
+                insumosCalculados.push({ nombre: "Mano de Obra Repello y Afinado", especificacion: "Maestreado, regleado y acabado fino", cantidad: parseFloat(area.toFixed(2)), unidad: "m²", precioU: preciosBase.manoObraRepello });
 
             } else if (moduloActual === "tablaroca") {
                 const l = parseFloat(document.getElementById('inLargoTab').value) || 0;
@@ -587,26 +589,27 @@
                 const cantPostes = Math.ceil((l / 0.61 + 1) * (h / 3.00));
                 const cajasTornillos = Math.ceil(cantPlacas / 10);
 
-                detalle = `Superficie: ${areaBruta.toFixed(2)} m² (${caras} caras) | ${cantPlacas} Placas Tablaroca | ${cantPostes} Postes + ${cantCanal} Canales`;
+                detalle = `Superficie: ${areaBruta.toFixed(2)} m² (${caras} caras) | ${cantPlacas} Placas de Tablaroca`;
 
                 insumosCalculados.push({ nombre: "Placas de Tablaroca ST 1/2\"", especificacion: "1.22m × 2.44m Estándar", cantidad: cantPlacas, unidad: "Piezas", precioU: preciosBase.piezaTablaroca });
                 insumosCalculados.push({ nombre: "Canal de Amarre / Omega 3m", especificacion: "Perfilería metálica 3m", cantidad: cantCanal, unidad: "Tramos", precioU: preciosBase.canalOmega });
-                insumosCalculados.push({ nombre: "Poste Metálico Estructural 3m", especificacion: "Postes a cada 61 cm", cantidad: cantPostes, unidad: "Tramos", precioU: preciosBase.postePoste });
+                insumosCalculados.push({ nombre: "Poste Metálico Estructural 3m", especificacion: "Postes colocados a cada 61 cm", cantidad: cantPostes, unidad: "Tramos", precioU: preciosBase.postePoste });
                 insumosCalculados.push({ nombre: "Tornillos y Cinta de Junta", especificacion: "Kits de fijación Drywall", cantidad: cajasTornillos, unidad: "Cajas", precioU: preciosBase.cajaTornillos });
+                insumosCalculados.push({ nombre: "Mano de Obra Instalación Tablaroca", especificacion: "Ensamble de perfilería y enmasillado", cantidad: parseFloat(areaBruta.toFixed(2)), unidad: "m²", precioU: preciosBase.manoObraTablaroca });
 
             } else if (moduloActual === "pvc") {
                 const largoM = parseFloat(document.getElementById('inLargoPVC').value) || 0;
                 const dia = document.getElementById('inDiaPVC').value;
 
-                // TUBOS COMERCIALES DE 6.00 METROS EXACTOS
                 const cantTubos6m = Math.ceil(largoM / 6.00);
                 const latasPegamento = Math.ceil(cantTubos6m / 10);
 
-                detalle = `Tramo de Tubería: ${largoM} m | Diámetro: ${dia}" | ${cantTubos6m} Tubos de 6.00 metros exactos`;
+                detalle = `Tramo: ${largoM} m | Diámetro: ${dia}" | ${cantTubos6m} Tubos de 6.00 metros exactos`;
 
-                insumosCalculados.push({ nombre: "Tubo PVC Sanitario / Potable", especificacion: `Longitud Estándar de 6.00 Metros (${dia}")`, cantidad: cantTubos6m, unidad: "Tubos (6m)", precioU: preciosBase.tuboPVC6m });
+                insumosCalculados.push({ nombre: "Tubo PVC Sanitario / Potable", especificacion: `Longitud Estándar 6.00 Metros (${dia}")`, cantidad: cantTubos6m, unidad: "Tubos (6m)", precioU: preciosBase.tuboPVC6m });
                 insumosCalculados.push({ nombre: "Limpiador y Pegamento PVC", especificacion: "Lata de 1/4 galón", cantidad: latasPegamento, unidad: "Latas", precioU: preciosBase.pegamentoPVC });
                 insumosCalculados.push({ nombre: "Accesorios y Codos PVC", especificacion: `Lote de conexiones ${dia}"`, cantidad: 1, unidad: "Lote", precioU: preciosBase.accesoriosPVCLote });
+                insumosCalculados.push({ nombre: "Mano de Obra Fontanería / PVC", especificacion: "Instalación, pegado y pruebas de presión", cantidad: largoM, unidad: "Metros", precioU: preciosBase.manoObraPVC });
 
             } else {
                 const l = parseFloat(document.getElementById('inGenLargo').value) || 0;
@@ -615,20 +618,19 @@
 
                 detalle = `Superficie General: ${area.toFixed(2)} m²`;
 
-                insumosCalculados.push({ nombre: "Trabajo / Servicio General", especificacion: "Cuantificación por m²", cantidad: parseFloat(area.toFixed(2)), unidad: "m²", precioU: preciosBase.manoObraM2 });
+                insumosCalculados.push({ nombre: "Materiales Generales Obra", especificacion: "Insumos varios por m²", cantidad: parseFloat(area.toFixed(2)), unidad: "m²", precioU: 10.00 });
+                insumosCalculados.push({ nombre: "Mano de Obra General", especificacion: "Trabajos de albañilería general", cantidad: parseFloat(area.toFixed(2)), unidad: "m²", precioU: preciosBase.manoObraMuro });
             }
 
             document.getElementById('formulaDetalle').textContent = detalle;
             renderizarTablaInsumos();
         }
 
-        // MODALES ESPECIALIZADOS E INFORMATIVOS
         function abrirModalEspecializado(actionId, titulo) {
             document.getElementById('modalContentTitle').textContent = titulo;
             const container = document.getElementById('modalContentBody');
 
             if (actionId === 14) {
-                // MÓDULO 14: CONSTRUCCIÓN FUTURISTA 3D, BIMmx, CIVIL 3D Y SKETCHUP
                 container.innerHTML = `
                     <div class="space-y-4">
                         <div class="flex space-x-2 border-b border-gray-700 pb-2 overflow-x-auto text-xs">
@@ -637,7 +639,6 @@
                             <button onclick="cambiarTabFuturista('tabSketchup')" class="px-3 py-1.5 bg-brandCard text-gray-300 font-bold rounded-t-lg hover:text-white">📐 SketchUp Free Web</button>
                         </div>
 
-                        <!-- TAB 1: BIMmx Y CIVIL 3D -->
                         <div id="tabBIM" class="space-y-3">
                             <div class="bg-blue-950/40 border-l-4 border-blue-500 p-3 rounded flex justify-between items-center">
                                 <div>
@@ -666,7 +667,6 @@
                             </div>
                         </div>
 
-                        <!-- TAB 2: PINTEREST EMBED -->
                         <div id="tabPinterest" class="hidden space-y-3">
                             <div class="bg-red-950/40 border-l-4 border-red-500 p-3 rounded flex justify-between items-center">
                                 <div>
@@ -679,7 +679,6 @@
                             </div>
                         </div>
 
-                        <!-- TAB 3: SKETCHUP WEB -->
                         <div id="tabSketchup" class="hidden space-y-3">
                             <div class="bg-emerald-950/40 border-l-4 border-emerald-500 p-3 rounded flex justify-between items-center">
                                 <div>
@@ -694,7 +693,6 @@
                     </div>
                 `;
             } else if (actionId === 15) {
-                // MÓDULO 15: SOSTENIBILIDAD Y ÁREAS VERDES (JARDINES, FUENTES Y APP DE DISEÑO)
                 container.innerHTML = `
                     <div class="space-y-4">
                         <div class="bg-green-950/40 border-l-4 border-green-500 p-4 rounded">
@@ -711,7 +709,7 @@
 
                             <div class="bg-black p-3 rounded-xl border border-gray-800">
                                 <img src="https://images.unsplash.com/photo-1584467541268-b040f83be3fd?auto=format&fit=crop&w=500&q=80" alt="Fuentes y Caídas de Agua" class="w-full h-32 object-cover rounded-lg mb-2">
-                                <h5 class="font-bold text-brandGold">Fuentes y Muros llorones</h5>
+                                <h5 class="font-bold text-brandGold">Fuentes y Muros Llorones</h5>
                                 <p class="text-[11px] text-gray-400 mt-1">Integración de caídas de agua en piedra laja con iluminación LED sumergible y bombas de recirculación.</p>
                             </div>
                         </div>
@@ -728,7 +726,6 @@
                     </div>
                 `;
             } else if (actionId === 13) {
-                // MÓDULO 13: GUÍA PARA EMPRENDER COMPLETA
                 container.innerHTML = `
                     <div class="space-y-4">
                         <div class="bg-amber-950/40 border-l-4 border-amber-500 p-4 rounded">
@@ -739,7 +736,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div class="bg-black p-3 rounded-xl border border-gray-800">
                                 <h5 class="font-bold text-brandGold">📋 1. Formato Profesional de Cotizaciones</h5>
-                                <p class="text-[11px] text-gray-400 mt-1">Cómo desglozar mano de obra, imprevistos (5%-10%) y utilidad neta en cada oferta comercial.</p>
+                                <p class="text-[11px] text-gray-400 mt-1">Cómo desglosar mano de obra, imprevistos (5%-10%) y utilidad neta en cada oferta comercial.</p>
                             </div>
                             <div class="bg-black p-3 rounded-xl border border-gray-800">
                                 <h5 class="font-bold text-brandGold">🤝 2. Contratos de Obra y Anticipos</h5>
