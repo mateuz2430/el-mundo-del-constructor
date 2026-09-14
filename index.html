@@ -23,7 +23,7 @@
 </head>
 <body class="bg-brandDark text-white font-sans antialiased min-h-screen">
 
-    <!-- CABECERA, SESIÓN Y SELECTOR DE MONEDA -->
+    <!-- CABECERA -->
     <header class="bg-black/80 border-b border-brandCardBorder p-4 sticky top-0 z-50 backdrop-blur-md">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center space-x-3">
@@ -36,9 +36,7 @@
                 </div>
             </div>
 
-            <!-- Autenticación y Moneda -->
             <div class="flex items-center space-x-3">
-                <!-- Estado de Sesión -->
                 <div id="userSessionArea" class="flex items-center space-x-2 bg-black px-3 py-1.5 rounded-lg border border-brandGold/40">
                     <span class="text-xs text-gray-300" id="userEmailLabel">Sin Sesión</span>
                     <button onclick="gestionarSesion()" id="btnSession" class="bg-brandGold text-black font-bold text-[10px] px-2 py-1 rounded hover:bg-brandGoldLight">
@@ -46,7 +44,6 @@
                     </button>
                 </div>
 
-                <!-- Selector de Moneda -->
                 <div class="flex items-center space-x-2 bg-brandCard px-3 py-1.5 rounded-lg border border-brandCardBorder">
                     <label for="currencySelect" class="text-xs text-gray-300 font-medium">País:</label>
                     <select id="currencySelect" onchange="actualizarMoneda()" class="bg-black text-brandGold text-sm rounded px-2 py-1 focus:outline-none border border-brandGold/40">
@@ -61,18 +58,17 @@
         </div>
     </header>
 
-    <!-- PORTADA Y ACCIONES RÁPIDAS -->
+    <!-- PORTADA -->
     <section class="max-w-7xl mx-auto p-4 my-2">
         <div class="relative w-full h-56 sm:h-72 rounded-2xl overflow-hidden border border-brandGold/30 shadow-2xl">
-            <!-- Imagen de Portada fija desde URL web -->
             <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=1200&q=80" alt="El Mundo del Constructor Portada" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-brandDark via-brandDark/50 to-transparent flex flex-col justify-end p-6">
+            <div class="absolute inset-0 bg-gradient-to-t from-brandDark via-brandDark/40 to-transparent flex flex-col justify-end p-6">
                 <span class="bg-brandGold text-black text-[10px] font-black uppercase px-2 py-0.5 rounded w-max mb-2">Plataforma Integral de Ingeniería</span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-brandGold uppercase tracking-wider">Módulos Técnicos y Almacenamiento Pro</h2>
             </div>
         </div>
 
-        <!-- PANEL DE HERRAMIENTAS Y MI HISTORIAL -->
+        <!-- HERRAMIENTAS -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
             <div class="bg-brandCard border border-brandGold/40 rounded-xl p-4 flex items-center justify-between">
                 <div>
@@ -116,14 +112,15 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="modulesGrid"></div>
     </main>
 
-    <!-- MODAL DE CÁLCULO E INSUMOS -->
+    <!-- MODAL DE CÁLCULO E INSUMOS CON PRECIOS EDITABLES -->
     <div id="calcModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-brandDark border border-brandGold/40 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
             <button onclick="cerrarModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">&times;</button>
             <div class="border-b border-brandCardBorder pb-4 mb-6">
                 <h3 id="modalTitle" class="text-2xl font-bold text-brandGold">Módulo de Cálculo</h3>
-                <p class="text-xs text-gray-400">Parámetros de entrada exactos para cotización de insumos sin margen de error.</p>
+                <p class="text-xs text-gray-400">Parámetros de entrada e insumos. Puedes ajustar los precios unitarios manualmente.</p>
             </div>
+            
             <div class="bg-brandCard p-4 rounded-xl border border-brandCardBorder mb-6">
                 <h4 class="text-sm font-bold text-brandGoldLight uppercase mb-3 tracking-wider">1. Parámetros de Entrada de la Obra</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -150,8 +147,13 @@
                     <div>Merma de Seguridad: <span class="text-brandGold font-bold">5%</span></div>
                 </div>
             </div>
+
+            <!-- DESGLOSE CON CAMPOS DE PRECIO EDITABLES -->
             <div class="bg-brandCard p-4 rounded-xl border border-brandCardBorder mb-6 overflow-x-auto">
-                <h4 class="text-sm font-bold text-brandGoldLight uppercase mb-3 tracking-wider">2. Desglose Auditáble de Insumos</h4>
+                <div class="flex justify-between items-center mb-3">
+                    <h4 class="text-sm font-bold text-brandGoldLight uppercase tracking-wider">2. Desglose Auditáble de Insumos</h4>
+                    <span class="text-[10px] text-brandGold bg-black border border-brandGold/40 px-2 py-0.5 rounded">✏️ Precios U. Editables</span>
+                </div>
                 <table class="w-full text-left text-xs border-collapse">
                     <thead>
                         <tr class="border-b border-gray-700 text-gray-400">
@@ -166,6 +168,7 @@
                     <tbody id="insumosTbody" class="divide-y divide-gray-800"></tbody>
                 </table>
             </div>
+
             <div class="flex flex-col sm:flex-row justify-between items-center bg-black p-4 rounded-xl border border-brandGold/30 gap-4">
                 <div class="text-xs text-gray-400">
                     <p class="font-bold text-brandGold">Fórmula de Verificación Aplicada:</p>
@@ -176,6 +179,7 @@
                     <span id="totalEstimado" class="text-2xl font-black text-brandGold">$809.90</span>
                 </div>
             </div>
+
             <div class="mt-6 flex flex-wrap justify-end gap-3">
                 <button onclick="cerrarModal()" class="px-4 py-2 rounded-lg bg-gray-700 text-xs font-bold text-white">Cerrar</button>
                 <button onclick="guardarEnHistorial()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold">💾 Guardar en Mi Cuenta</button>
@@ -185,20 +189,17 @@
         </div>
     </div>
 
-    <!-- MODAL DE HISTORIAL DEL USUARIO -->
+    <!-- MODAL HISTORIAL -->
     <div id="historialModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-brandDark border border-brandGold/40 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
             <button onclick="cerrarHistorial()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">&times;</button>
             <h3 class="text-2xl font-bold text-brandGold mb-2">Mi Historial de Cotizaciones y Archivos</h3>
             <p class="text-xs text-gray-400 mb-6">Todos tus registros, imágenes cargadas y exportaciones asociadas a tu cuenta.</p>
-
-            <div id="listaHistorial" class="space-y-4">
-                <!-- Se poblará mediante JS -->
-            </div>
+            <div id="listaHistorial" class="space-y-4"></div>
         </div>
     </div>
 
-    <!-- MODAL DE BITÁCORA Y CONTROL DE OBRA -->
+    <!-- MODAL BITÁCORA -->
     <div id="bitacoraModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-brandDark border border-brandGold/40 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
             <button onclick="cerrarBitacora()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">&times;</button>
@@ -211,7 +212,7 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-300 mb-1">Anotación de Campo / Incidencia:</label>
-                    <textarea id="txtBitacora" rows="3" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm" placeholder="Ejemplo: Se recibe colada de concreto de 210 kg/cm² sin novedad..."></textarea>
+                    <textarea id="txtBitacora" rows="3" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm" placeholder="Ejemplo: Se recibe colada de concreto..."></textarea>
                 </div>
                 <button onclick="guardarBitacora()" class="w-full bg-brandGold text-black font-bold py-2 rounded-lg text-xs">Guardar Entrada en Bitácora</button>
             </div>
@@ -223,30 +224,30 @@
         let usuarioActual = localStorage.getItem('mc_usuario') || null;
         let datosOrden = {};
 
-        // LISTA DE MÓDULOS CON IMÁGENES ESPECÍFICAS DE SU ÁREA CORRESPONDIENTE
+        // Precios base globales editables dinámicamente
+        let preciosBase = { bloque: 0.65, cemento: 8.50, arena: 22.00, manoObra: 6.00 };
+
         const modulosList = [
             { id: 1, title: "Excavación y Relleno", img: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=600&q=80" },
-            { id: 2, title: "Cimientos y Zapatas", img: "https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?auto=format&fit=crop&w=600&q=80" },
+            { id: 2, title: "Cimientos y Zapatas", img: "https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=600&q=80" },
             { id: 3, title: "Losa", img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80" },
-            { id: 4, title: "Vigas y Columnas", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" },
-            { id: 5, title: "Acabados (Paredes y Repello)", img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80" },
-            { id: 6, title: "Tablaroca y Cielos", img: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=600&q=80" },
+            { id: 4, title: "Vigas", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" },
+            { id: 5, title: "Acabados (Paredes y Repello)", img: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=600&q=80" },
+            { id: 6, title: "Tablaroca", img: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=600&q=80" },
             { id: 7, title: "Instalaciones PVC", img: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=600&q=80" },
-            { id: 8, title: "Pisos y Cerámicas", img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" },
+            { id: 8, title: "Pisos y Cerámicas", img: "https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?auto=format&fit=crop&w=600&q=80" },
             { id: 9, title: "Pintura", img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80" },
-            { id: 10, title: "Escaleras", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" },
+            { id: 10, title: "Escaleras", img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" },
             { id: 11, title: "Presupuestos y Cotizaciones", img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80" },
-            { id: 12, title: "Guía de Aprendizaje", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=600&q=80" },
-            { id: 13, title: "Guía para Emprender", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80" },
+            { id: 12, title: "Guía de Aprendizaje", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80" },
+            { id: 13, title: "Guía para Emprender", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80" },
             { id: 14, title: "Constructor Futurista", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80" },
             { id: 15, title: "Sostenibilidad y Verde", img: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=600&q=80" },
             { id: 16, title: "Seguridad en la Obra", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" },
-            { id: 17, title: "Herramientas y Maquinaria", img: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" },
+            { id: 17, title: "Herramientas y Maquinaria", img: "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&w=600&q=80" },
             { id: 18, title: "Normativas y Reglamentos", img: "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=600&q=80" },
             { id: 19, title: "Comunidad y Soporte", img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" }
         ];
-
-        const preciosBase = { bloque: 0.65, cemento: 8.50, arena: 22.00, agua: 0.01, manoObra: 6.00 };
 
         function inicializarSesion() {
             if (usuarioActual) {
@@ -271,7 +272,7 @@
                     usuarioActual = correo;
                     localStorage.setItem('mc_usuario', correo);
                     inicializarSesion();
-                    alert("Sesión iniciada con éxito. Ahora todas tus cotizaciones se guardarán asociadas a tu correo.");
+                    alert("Sesión iniciada con éxito.");
                 } else if (correo) {
                     alert("Por favor ingrese un correo válido.");
                 }
@@ -286,8 +287,8 @@
                 card.className = "bg-brandCard border border-brandCardBorder hover:border-brandGold transition-all rounded-xl overflow-hidden cursor-pointer group shadow-lg flex flex-col";
                 card.onclick = () => abrirModal(mod.title);
                 card.innerHTML = `
-                    <div class="h-36 overflow-hidden relative bg-gray-900">
-                        <img src="${mod.img}" alt="${mod.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="h-36 overflow-hidden relative">
+                        <img src="${mod.img}" alt="${mod.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                         <div class="absolute top-2 left-2 bg-black/80 border border-brandGold px-2 py-0.5 rounded text-[10px] font-bold text-brandGold">#${mod.id}</div>
                     </div>
                     <div class="p-3 flex-1 flex flex-col justify-between">
@@ -316,6 +317,12 @@
         function abrirBitacora() { document.getElementById('bitacoraModal').classList.remove('hidden'); }
         function cerrarBitacora() { document.getElementById('bitacoraModal').classList.add('hidden'); }
 
+        // Actualizar valor de precios base al escribir en las cajas
+        function actualizarPrecioUnitario(clave, valor) {
+            preciosBase[clave] = parseFloat(valor) || 0;
+            calcularInsumos();
+        }
+
         function calcularInsumos() {
             const largo = parseFloat(document.getElementById('inputLargo').value) || 0;
             const alto = parseFloat(document.getElementById('inputAlto').value) || 0;
@@ -329,6 +336,7 @@
             const sacosCemento = Math.ceil(area * 0.31 * factorEspesor);
             const m3Arena = (area * 0.025 * factorEspesor).toFixed(2);
 
+            // Cálculo utilizando los precios editables del objeto preciosBase
             const subBloques = unidadesConMerma * preciosBase.bloque;
             const subCemento = sacosCemento * preciosBase.cemento;
             const subArena = m3Arena * preciosBase.arena;
@@ -344,25 +352,62 @@
                 anchoBloque: anchoBloque,
                 cemento: sacosCemento,
                 arena: m3Arena,
+                precios: { ...preciosBase },
                 total: total.toFixed(2),
                 fecha: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
+            // Renders con inputs editables en la columna Precio U.
             document.getElementById('insumosTbody').innerHTML = `
-                <tr><td class="py-2 px-2 font-bold">Bloque de Concreto</td><td class="py-2 px-2">${anchoBloque}x20x40 cm</td><td class="py-2 px-2 text-center font-bold text-brandGold">${unidadesConMerma}</td><td class="py-2 px-2 text-center">Pzas</td><td class="py-2 px-2 text-right">${currentSymbol}${preciosBase.bloque.toFixed(2)}</td><td class="py-2 px-2 text-right font-bold">${currentSymbol}${subBloques.toFixed(2)}</td></tr>
-                <tr><td class="py-2 px-2 font-bold">Cemento Portland</td><td class="py-2 px-2">Sacos 42.5 kg</td><td class="py-2 px-2 text-center font-bold text-brandGold">${sacosCemento}</td><td class="py-2 px-2 text-center">Sacos</td><td class="py-2 px-2 text-right">${currentSymbol}${preciosBase.cemento.toFixed(2)}</td><td class="py-2 px-2 text-right font-bold">${currentSymbol}${subCemento.toFixed(2)}</td></tr>
-                <tr><td class="py-2 px-2 font-bold">Arena de Río</td><td class="py-2 px-2">Mezcla Pega</td><td class="py-2 px-2 text-center font-bold text-brandGold">${m3Arena}</td><td class="py-2 px-2 text-center">m³</td><td class="py-2 px-2 text-right">${currentSymbol}${preciosBase.arena.toFixed(2)}</td><td class="py-2 px-2 text-right font-bold">${currentSymbol}${subArena.toFixed(2)}</td></tr>
-                <tr><td class="py-2 px-2 font-bold">Mano de Obra</td><td class="py-2 px-2">Superficie</td><td class="py-2 px-2 text-center font-bold text-brandGold">${area.toFixed(2)}</td><td class="py-2 px-2 text-center">m²</td><td class="py-2 px-2 text-right">${currentSymbol}${preciosBase.manoObra.toFixed(2)}</td><td class="py-2 px-2 text-right font-bold">${currentSymbol}${subManoObra.toFixed(2)}</td></tr>
+                <tr>
+                    <td class="py-2 px-2 font-bold">Bloque de Concreto</td>
+                    <td class="py-2 px-2">${anchoBloque}x20x40 cm</td>
+                    <td class="py-2 px-2 text-center font-bold text-brandGold">${unidadesConMerma}</td>
+                    <td class="py-2 px-2 text-center">Pzas</td>
+                    <td class="py-2 px-2 text-right">
+                        <input type="number" step="0.01" value="${preciosBase.bloque.toFixed(2)}" onchange="actualizarPrecioUnitario('bloque', this.value)" class="w-20 bg-black border border-brandGold/50 rounded text-right px-1 text-brandGold font-bold focus:outline-none">
+                    </td>
+                    <td class="py-2 px-2 text-right font-bold">${currentSymbol}${subBloques.toFixed(2)}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-2 font-bold">Cemento Portland</td>
+                    <td class="py-2 px-2">Sacos 42.5 kg</td>
+                    <td class="py-2 px-2 text-center font-bold text-brandGold">${sacosCemento}</td>
+                    <td class="py-2 px-2 text-center">Sacos</td>
+                    <td class="py-2 px-2 text-right">
+                        <input type="number" step="0.01" value="${preciosBase.cemento.toFixed(2)}" onchange="actualizarPrecioUnitario('cemento', this.value)" class="w-20 bg-black border border-brandGold/50 rounded text-right px-1 text-brandGold font-bold focus:outline-none">
+                    </td>
+                    <td class="py-2 px-2 text-right font-bold">${currentSymbol}${subCemento.toFixed(2)}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-2 font-bold">Arena de Río</td>
+                    <td class="py-2 px-2">Mezcla Pega</td>
+                    <td class="py-2 px-2 text-center font-bold text-brandGold">${m3Arena}</td>
+                    <td class="py-2 px-2 text-center">m³</td>
+                    <td class="py-2 px-2 text-right">
+                        <input type="number" step="0.01" value="${preciosBase.arena.toFixed(2)}" onchange="actualizarPrecioUnitario('arena', this.value)" class="w-20 bg-black border border-brandGold/50 rounded text-right px-1 text-brandGold font-bold focus:outline-none">
+                    </td>
+                    <td class="py-2 px-2 text-right font-bold">${currentSymbol}${subArena.toFixed(2)}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-2 font-bold">Mano de Obra</td>
+                    <td class="py-2 px-2">Superficie</td>
+                    <td class="py-2 px-2 text-center font-bold text-brandGold">${area.toFixed(2)}</td>
+                    <td class="py-2 px-2 text-center">m²</td>
+                    <td class="py-2 px-2 text-right">
+                        <input type="number" step="0.01" value="${preciosBase.manoObra.toFixed(2)}" onchange="actualizarPrecioUnitario('manoObra', this.value)" class="w-20 bg-black border border-brandGold/50 rounded text-right px-1 text-brandGold font-bold focus:outline-none">
+                    </td>
+                    <td class="py-2 px-2 text-right font-bold">${currentSymbol}${subManoObra.toFixed(2)}</td>
+                </tr>
             `;
 
             document.getElementById('formulaDetalle').textContent = `${area.toFixed(2)} m² × 12.5 bloques/m² (+ 5% desperdicio) = ${unidadesConMerma} Piezas`;
             document.getElementById('totalEstimado').textContent = `${currentSymbol}${total.toFixed(2)}`;
         }
 
-        // GUARDADO EN HISTORIAL
-        function guardarEnHistorial(imagenOpcional = null) {
+        function guardarEnHistorial() {
             if (!usuarioActual) {
-                alert("Por favor inicia sesión con tu correo primero para poder guardar tus cotizaciones.");
+                alert("Por favor inicia sesión con tu correo primero para guardar tus cotizaciones.");
                 gestionarSesion();
                 if (!usuarioActual) return;
             }
@@ -373,7 +418,7 @@
                 id: Date.now(),
                 ...datosOrden,
                 moneda: currentSymbol,
-                imagen: imagenOpcional || "Plano_Escaneado_Verificado.png"
+                imagen: "Plano_Escaneado_Verificado.png"
             };
 
             historial.unshift(registro);
@@ -383,7 +428,7 @@
 
         function abrirHistorial() {
             if (!usuarioActual) {
-                alert("Debes ingresar tu correo electrónico para ver tu historial de registros.");
+                alert("Debes ingresar tu correo electrónico para ver tu historial.");
                 gestionarSesion();
                 if (!usuarioActual) return;
             }
@@ -419,19 +464,20 @@
             document.getElementById('historialModal').classList.remove('hidden');
         }
 
-        function cerrarHistorial() {
-            document.getElementById('historialModal').classList.add('hidden');
-        }
+        function cerrarHistorial() { document.getElementById('historialModal').classList.add('hidden'); }
 
         function cargarRegistroGuardado(item) {
             document.getElementById('inputLargo').value = item.largo;
             document.getElementById('inputAlto').value = item.alto;
+            if(item.precios) {
+                preciosBase = { ...item.precios };
+            }
             cerrarHistorial();
             abrirModal(item.modulo);
         }
 
         function exportarPDFGuardado(item) {
-            alert(`Generando documento PDF oficial para:\n\nPropietario: ${usuarioActual}\nMódulo: ${item.modulo}\nDimensiones: ${item.area} m²\nTotal Cotizado: ${item.moneda}${item.total}\nFecha: ${item.fecha}`);
+            alert(`Generando PDF oficial:\nPropietario: ${usuarioActual}\nMódulo: ${item.modulo}\nTotal: ${item.moneda}${item.total}`);
         }
 
         function activarDictadoVoz() {
@@ -443,7 +489,7 @@
 
         function escanearPlano(input) {
             if (input.files && input.files[0]) {
-                alert("Analizando imagen con protocolo cero margen de error...");
+                alert("Analizando plano...");
                 document.getElementById('inputLargo').value = 18.50;
                 document.getElementById('inputAlto').value = 2.80;
                 abrirModal("Acabados (Paredes y Repello)");
@@ -460,7 +506,7 @@
         }
 
         function guardarBitacora() {
-            alert("Entrada guardada con éxito en la Bitácora de Obra.");
+            alert("Entrada guardada en Bitácora.");
             cerrarBitacora();
         }
 
