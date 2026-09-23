@@ -124,7 +124,126 @@
         </div>
     </div>
 
-    <!-- MODAL DE CÁLCULO E INSUMOS -->
+    <!-- MODAL DE CÁLCULO E INSUMOS<!-- === INICIO DESGLOSE MATERIALES Y MANO DE OBRA EDITABLE === -->
+<h3 class="section-title">Desglose Exacto de Materiales y Mano de Obra</h3>
+<p class="section-subtitle">
+  Puedes editar directamente los precios unitarios y cantidades según tu país o proveedor local para actualizar los totales en tiempo real.
+</p>
+
+<!-- Selector de Moneda y País -->
+<div class="currency-selector-box" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center;">
+  <label for="selectMoneda" style="font-weight: bold; font-size: 0.9rem;">Moneda / País:</label>
+  <select id="selectMoneda" onchange="actualizarSimboloMoneda()" style="padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc;">
+    <option value="$" selected>USD ($) - El Salvador / Ecuador / USA</option>
+    <option value="Q">GTQ (Q) - Guatemala</option>
+    <option value="L">HNL (L) - Honduras</option>
+    <option value="C$">NIO (C$) - Nicaragua</option>
+    <option value="₡">CRC (₡) - Costa Rica</option>
+    <option value="MXN $">MXN ($) - México</option>
+  </select>
+</div>
+
+<!-- Tabla Editable de Materiales e Insumos -->
+<div class="table-container" style="overflow-x: auto;">
+  <table id="tablaMaterialesEditable" style="width: 100%; border-collapse: collapse; margin-top: 10px; background: #ffffff;">
+    <thead>
+      <tr style="background-color: #1e3a8a; color: #ffffff; text-align: left; font-size: 0.85rem;">
+        <th style="padding: 10px;">Insumo / Concepto</th>
+        <th style="padding: 10px; text-align: center;">Cantidad</th>
+        <th style="padding: 10px; text-align: center;">Unidad</th>
+        <th style="padding: 10px; text-align: right;">P. Unitario (<span class="symboloMoneda">$</span>)</th>
+        <th style="padding: 10px; text-align: right;">Subtotal (<span class="symboloMoneda">$</span>)</th>
+      </tr>
+    </thead>
+    <tbody id="bodyTablaInsumos">
+      <!-- Fila 1: Excavación / Mano de Obra -->
+      <tr style="border-bottom: 1px solid #e2e8f0;">
+        <td style="padding: 10px; font-weight: 500;">Mano de Obra (Excavación de Zanja)</td>
+        <td style="padding: 10px; text-align: center;">
+          <input type="number" id="cant_mo" value="1.00" step="0.1" oninput="recalcularTablaEditable()" style="width: 70px; text-align: center;">
+        </td>
+        <td style="padding: 10px; text-align: center;">m³</td>
+        <td style="padding: 10px; text-align: right;">
+          <input type="number" id="precio_mo" value="8.00" step="0.5" oninput="recalcularTablaEditable()" style="width: 80px; text-align: right;">
+        </td>
+        <td style="padding: 10px; text-align: right; font-weight: bold;" id="subtotal_mo"><span class="symboloMoneda">$</span>8.00</td>
+      </tr>
+
+      <!-- Fila 2: Herramienta Menor -->
+      <tr style="border-bottom: 1px solid #e2e8f0;">
+        <td style="padding: 10px; font-weight: 500;">Herramienta Menor y Desgaste (5%)</td>
+        <td style="padding: 10px; text-align: center;">
+          <input type="number" id="cant_herramienta" value="1.00" step="1" oninput="recalcularTablaEditable()" style="width: 70px; text-align: center;" readonly>
+        </td>
+        <td style="padding: 10px; text-align: center;">Est.</td>
+        <td style="padding: 10px; text-align: right;">
+          <input type="number" id="precio_herramienta" value="0.40" step="0.1" oninput="recalcularTablaEditable()" style="width: 80px; text-align: right;">
+        </td>
+        <td style="padding: 10px; text-align: right; font-weight: bold;" id="subtotal_herramienta"><span class="symboloMoneda">$</span>0.40</td>
+      </tr>
+
+      <!-- Fila 3: Acarreo / Desalojo de Tierra -->
+      <tr style="border-bottom: 1px solid #e2e8f0;">
+        <td style="padding: 10px; font-weight: 500;">Acarreo de Material Sobrante (Esponjamiento)</td>
+        <td style="padding: 10px; text-align: center;">
+          <input type="number" id="cant_desalojo" value="1.25" step="0.05" oninput="recalcularTablaEditable()" style="width: 70px; text-align: center;">
+        </td>
+        <td style="padding: 10px; text-align: center;">m³</td>
+        <td style="padding: 10px; text-align: right;">
+          <input type="number" id="precio_desalojo" value="5.00" step="0.5" oninput="recalcularTablaEditable()" style="width: 80px; text-align: right;">
+        </td>
+        <td style="padding: 10px; text-align: right; font-weight: bold;" id="subtotal_desalojo"><span class="symboloMoneda">$</span>6.25</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr style="background-color: #f1f5f9; font-weight: bold;">
+        <td colspan="4" style="padding: 12px; text-align: right; font-size: 1rem;">TOTAL ESTIMADO DE ETAPA:</td>
+        <td style="padding: 12px; text-align: right; color: #15803d; font-size: 1.1rem;" id="totalGeneralTabla">
+          <span class="symboloMoneda">$</span>14.65
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<!-- LÓGICA DE ACTUALIZACIÓN DINÁMICA -->
+<script>
+  function actualizarSimboloMoneda() {
+    var sim = document.getElementById("selectMoneda").value;
+    var elementos = document.querySelectorAll(".symboloMoneda");
+    elementos.forEach(function(el) {
+      el.innerText = sim;
+    });
+    recalcularTablaEditable();
+  }
+
+  function recalcularTablaEditable() {
+    var sim = document.getElementById("selectMoneda").value;
+
+    // Fila 1: MO
+    var cMO = parseFloat(document.getElementById("cant_mo").value) || 0;
+    var pMO = parseFloat(document.getElementById("precio_mo").value) || 0;
+    var subMO = cMO * pMO;
+    document.getElementById("subtotal_mo").innerText = sim + subMO.toFixed(2);
+
+    // Fila 2: Herramientas
+    var cHer = parseFloat(document.getElementById("cant_herramienta").value) || 0;
+    var pHer = parseFloat(document.getElementById("precio_herramienta").value) || 0;
+    var subHer = cHer * pHer;
+    document.getElementById("subtotal_herramienta").innerText = sim + subHer.toFixed(2);
+
+    // Fila 3: Desalojo
+    var cDes = parseFloat(document.getElementById("cant_desalojo").value) || 0;
+    var pDes = parseFloat(document.getElementById("precio_desalojo").value) || 0;
+    var subDes = cDes * pDes;
+    document.getElementById("subtotal_desalojo").innerText = sim + subDes.toFixed(2);
+
+    // Total General
+    var total = subMO + subHer + subDes;
+    document.getElementById("totalGeneralTabla").innerText = sim + total.toFixed(2);
+  }
+</script>
+<!-- === FIN DESGLOSE MATERIALES Y MANO DE OBRA EDITABLE === --> 
     <div id="calcModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
         <div class="bg-brandDark border border-brandGold/40 rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
             <button onclick="cerrarModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">&times;</button>
