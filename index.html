@@ -1,4 +1,44 @@
-<!DOCTYPE html><!-- ... código anterior del index.html ... -->
+<!DOCTYPE html><!-- ... código anterior del index.html ... --><!-- ... código anterior del index.html ... -->
+
+    <script>
+      // === INICIO MÓDULO 1: EXCAVACIÓN Y CIMENTACIÓN ===
+      function calcularModulo1(largo, ancho, profundidad, costoManoObraPorMetro) {
+        var l = parseFloat(largo) || 0;
+        var a = parseFloat(ancho) || 0;
+        var p = parseFloat(profundidad) || 0;
+        var precioMO = parseFloat(costoManoObraPorMetro) || 0;
+
+        if (l <= 0 || a <= 0 || p <= 0) {
+          return {
+            exito: false,
+            mensaje: "Por favor ingrese dimensiones válidas mayores a cero."
+          };
+        }
+
+        var volumenExcavacion = l * a * p;
+        var factorEsponjamiento = 1.25;
+        var volumenVolumenAfectado = volumenExcavacion * factorEsponjamiento;
+        var costoTotalManoObra = volumenExcavacion * precioMO;
+
+        return {
+          exito: true,
+          volumenReal: volumenExcavacion.toFixed(2),
+          volumenDesalojo: volumenVolumenAfectado.toFixed(2),
+          costoManoObra: costoTotalManoObra.toFixed(2),
+          resumenHTML: `
+            <div class="resultado-box">
+              <h4>Resumen Módulo 1: Excavación</h4>
+              <p><strong>Volumen Neto a Excavarse:</strong> ${volumenExcavacion.toFixed(2)} m³</p>
+              <p><strong>Volumen con Esponjamiento (a desalojar):</strong> ${volumenVolumenAfectado.toFixed(2)} m³</p>
+              <p><strong>Costo Est. Mano de Obra:</strong> $${costoTotalManoObra.toFixed(2)}</p>
+            </div>
+          `
+        };
+      }
+      // === FIN MÓDULO 1: EXCAVACIÓN Y CIMENTACIÓN ===
+    </script>
+  </body>
+</html>
 
     <script>
       // === INICIO MÓDULO 1: EXCAVACIÓN Y CIMENTACIÓN ===
