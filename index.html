@@ -24,7 +24,7 @@
 <body class="bg-brandDark text-white font-sans antialiased min-h-screen">
 
     <!-- CABECERA PRINCIPAL Y SELECTOR DE MONEDA -->
-    <header class="bg-black/80 border-b border-brandCardBorder p-4 sticky top-0 z-50 backdrop-blur-md">
+    <header class="bg-black/90 border-b border-brandCardBorder p-4 sticky top-0 z-50 backdrop-blur-md">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-full border border-brandGold flex items-center justify-center bg-black">
@@ -49,16 +49,12 @@
         </div>
     </header>
 
-    <!-- PORTADA ORIGINAL INTACTA -->
+    <!-- PORTADA SIN IMAGEN (SÓLO TEXTO Y DISEÑO LIMPIO) -->
     <section class="max-w-7xl mx-auto p-4 my-2">
-        <div class="relative w-full h-56 sm:h-72 rounded-2xl overflow-hidden border border-brandGold/30 shadow-2xl">
-            <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=1200&q=80" 
-                 alt="El Mundo del Constructor Portada" 
-                 class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-brandDark via-brandDark/40 to-transparent flex flex-col justify-end p-6">
-                <span class="bg-brandGold text-black text-[10px] font-black uppercase px-2 py-0.5 rounded w-max mb-2">Plataforma Integral de Ingeniería</span>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-brandGold uppercase tracking-wider">Módulos Técnicos y Almacenamiento Pro</h2>
-            </div>
+        <div class="w-full bg-gradient-to-r from-black via-brandCard to-black border border-brandGold/40 rounded-2xl p-6 shadow-2xl flex flex-col justify-center">
+            <span class="bg-brandGold text-black text-[10px] font-black uppercase px-2 py-0.5 rounded w-max mb-2">Plataforma Integral de Ingeniería</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-brandGold uppercase tracking-wider">Módulos Técnicos y Almacenamiento Pro</h2>
+            <p class="text-xs text-gray-400 mt-1">Herramientas de cuantificación, rendimientos de mano de obra y costos de maquinaria en obra.</p>
         </div>
 
         <!-- PANEL DE ACCIONES -->
@@ -103,12 +99,15 @@
     <!-- CONTENEDOR PRINCIPAL -->
     <main class="max-w-7xl mx-auto p-4 space-y-6">
 
-        <!-- MÓDULO 1: EXCAVACIÓN Y RELLENO (CON IMAGEN DE EXCAVADORA) -->
+        <!-- MÓDULO 1: EXCAVACIÓN Y RELLENO (CON IMAGEN DE EXCAVADORA Y VOLQUETA) -->
         <div id="modulo_1_excavacion" class="bg-brandCard border border-brandCardBorder rounded-2xl p-6 shadow-2xl">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center mb-6 border-b border-brandCardBorder pb-6"> </div><img src="https://images.unsplash.com/photo-1785484267832-55ca462c2ecd?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-     alt="Retroexcavadora realizando trabajos de excavación" 
-     class="w-full h-full object-cover">
-            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center mb-6 border-b border-brandCardBorder pb-6">
+                
+                <!-- Imagen de Excavadora y Volqueta cargando en movimiento de tierras -->
+                <div class="md:col-span-1 h-48 rounded-xl overflow-hidden border border-brandGold/30 relative shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80" 
+                         alt="Excavadora cargando tierra en volqueta" 
+                         class="w-full h-full object-cover">
                     <div class="absolute top-2 left-2 bg-black/80 border border-brandGold px-2 py-0.5 rounded text-xs font-bold text-brandGold">
                         MÓDULO 01
                     </div>
@@ -117,7 +116,7 @@
                 <div class="md:col-span-2">
                     <h2 class="text-2xl font-bold text-brandGold uppercase tracking-wider">Excavación y Relleno</h2>
                     <p class="text-sm text-gray-300 mt-2">
-                        Calcula el volumen exacto de zanja o vaciado, el abultamiento por esponjamiento y compara costos entre ejecución <strong>manual (peones)</strong> y <strong>mecanizada (retroexcavadora)</strong>.
+                        Calcula el volumen exacto de zanja o vaciado, el abultamiento por esponjamiento y compara costos entre ejecución <strong>manual (peones)</strong> y <strong>mecanizada (retroexcavadora y volqueta)</strong>.
                     </p>
                 </div>
             </div>
@@ -182,7 +181,7 @@
                             <label class="block text-gray-300 mb-1">Tipo de Máquina:</label>
                             <select id="m1_tipoMaq" onchange="m1_calcular()" class="w-full bg-black border border-gray-600 rounded p-2 text-white focus:border-brandGold focus:outline-none">
                                 <option value="12|25.00" selected>Miniexcavadora (12 m³/hr)</option>
-                                <option value="25|40.00">Retroexcavadora (25 m³/hr)</option>
+                                <option value="25|40.00">Retroexcavadora / Volqueta (25 m³/hr)</option>
                             </select>
                         </div>
                         <div>
