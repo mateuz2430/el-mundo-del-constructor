@@ -1,3 +1,339 @@
-<img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80" 
-     alt="Maquinaria de construcción y casco en obra" 
-     class="w-full h-full object-cover">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Mundo del Constructor - App Pro AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandGold: '#D4AF37',
+                        brandGoldLight: '#F6E27A',
+                        brandDark: '#121212',
+                        brandCard: '#2B2B2B',
+                        brandCardBorder: '#3A3A3A'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brandDark text-white font-sans antialiased min-h-screen">
+
+    <!-- CABECERA PRINCIPAL Y SELECTOR DE MONEDA -->
+    <header class="bg-black/80 border-b border-brandCardBorder p-4 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full border border-brandGold flex items-center justify-center bg-black">
+                    <span class="text-brandGold font-bold text-lg">MC</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wider text-brandGold">EL MUNDO DEL CONSTRUCTOR</h1>
+                    <p class="text-xs text-gray-400">Calcula • Construye • Aprende • Emprende • Crece</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2 bg-brandCard px-3 py-1.5 rounded-lg border border-brandCardBorder">
+                <label for="currencySelect" class="text-xs text-gray-300 font-medium">Moneda / País:</label>
+                <select id="currencySelect" onchange="actualizarMoneda()" class="bg-black text-brandGold text-sm rounded px-2 py-1 focus:outline-none border border-brandGold/40">
+                    <option value="USD" data-symbol="$" selected>El Salvador (USD $)</option>
+                    <option value="GTQ" data-symbol="Q">Guatemala (GTQ Q)</option>
+                    <option value="HNL" data-symbol="L">Honduras (HNL L)</option>
+                    <option value="MXN" data-symbol="$">México (MXN $)</option>
+                    <option value="CRC" data-symbol="₡">Costa Rica (CRC ₡)</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- PORTADA ORIGINAL INTACTA -->
+    <section class="max-w-7xl mx-auto p-4 my-2">
+        <div class="relative w-full h-56 sm:h-72 rounded-2xl overflow-hidden border border-brandGold/30 shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=1200&q=80" 
+                 alt="El Mundo del Constructor Portada" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-brandDark via-brandDark/40 to-transparent flex flex-col justify-end p-6">
+                <span class="bg-brandGold text-black text-[10px] font-black uppercase px-2 py-0.5 rounded w-max mb-2">Plataforma Integral de Ingeniería</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-brandGold uppercase tracking-wider">Módulos Técnicos y Almacenamiento Pro</h2>
+            </div>
+        </div>
+
+        <!-- PANEL DE ACCIONES -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+            <div class="bg-brandCard border border-brandGold/40 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                    <h4 class="text-sm font-bold text-brandGold">🎤 Asistente Voz</h4>
+                    <p class="text-xs text-gray-400">Dictado en obra.</p>
+                </div>
+                <button onclick="activarDictadoVoz()" class="bg-brandGold text-black text-xs font-bold px-3 py-2 rounded-lg">Dictar</button>
+            </div>
+
+            <div class="bg-brandCard border border-brandGold/40 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                    <h4 class="text-sm font-bold text-brandGold">📷 Escáner IA</h4>
+                    <p class="text-xs text-gray-400">Planos y paredes.</p>
+                </div>
+                <label class="bg-black border border-brandGold text-brandGold text-xs font-bold px-3 py-2 rounded-lg cursor-pointer">
+                    Cargar
+                    <input type="file" accept="image/*" class="hidden" onchange="escanearPlano(this)">
+                </label>
+            </div>
+
+            <div class="bg-brandCard border border-brandGold/40 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                    <h4 class="text-sm font-bold text-brandGold">📋 Bitácora</h4>
+                    <p class="text-xs text-gray-400">Avance diario.</p>
+                </div>
+                <button onclick="abrirBitacora()" class="bg-brandGold text-black text-xs font-bold px-3 py-2 rounded-lg">Abrir</button>
+            </div>
+
+            <div class="bg-brandCard border border-brandGold rounded-xl p-4 flex items-center justify-between bg-brandGold/10">
+                <div>
+                    <h4 class="text-sm font-bold text-brandGold">📁 Mi Historial</h4>
+                    <p class="text-xs text-gray-400">Cotizaciones y fotos.</p>
+                </div>
+                <button onclick="abrirHistorial()" class="bg-brandGold text-black text-xs font-bold px-3 py-2 rounded-lg hover:bg-brandGoldLight">Ver Todo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="max-w-7xl mx-auto p-4 space-y-6">
+
+        <!-- MÓDULO 1: EXCAVACIÓN Y RELLENO (CON IMAGEN DE EXCAVADORA) -->
+        <div id="modulo_1_excavacion" class="bg-brandCard border border-brandCardBorder rounded-2xl p-6 shadow-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center mb-6 border-b border-brandCardBorder pb-6">
+                
+                <!-- Imagen corregida de excavadora operando en obra -->
+                <div class="md:col-span-1 h-48 rounded-xl overflow-hidden border border-brandGold/30 relative shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" 
+                         alt="Excavadora trabajando en obra" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute top-2 left-2 bg-black/80 border border-brandGold px-2 py-0.5 rounded text-xs font-bold text-brandGold">
+                        MÓDULO 01
+                    </div>
+                </div>
+                
+                <div class="md:col-span-2">
+                    <h2 class="text-2xl font-bold text-brandGold uppercase tracking-wider">Excavación y Relleno</h2>
+                    <p class="text-sm text-gray-300 mt-2">
+                        Calcula el volumen exacto de zanja o vaciado, el abultamiento por esponjamiento y compara costos entre ejecución <strong>manual (peones)</strong> y <strong>mecanizada (retroexcavadora)</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Parámetros de Entrada -->
+            <div class="bg-black/50 p-4 rounded-xl border border-brandCardBorder mb-6">
+                <h3 class="text-sm font-bold text-brandGoldLight uppercase mb-3 tracking-wider">1. Dimensiones de la Zanja / Excavación</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs text-gray-300 mb-1">Longitud (m):</label>
+                        <input type="number" id="m1_largo" value="10.00" step="0.10" oninput="m1_calcular()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm focus:border-brandGold focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-300 mb-1">Ancho (m):</label>
+                        <input type="number" id="m1_ancho" value="0.60" step="0.05" oninput="m1_calcular()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm focus:border-brandGold focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-300 mb-1">Profundidad (m):</label>
+                        <input type="number" id="m1_profundidad" value="1.00" step="0.05" oninput="m1_calcular()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm focus:border-brandGold focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-300 mb-1">Tipo de Terreno:</label>
+                        <select id="m1_tipoTerreno" onchange="m1_calcular()" class="w-full bg-black border border-gray-600 rounded p-2 text-white text-sm focus:border-brandGold focus:outline-none">
+                            <option value="1.20|2.5" selected>Blando / Suave</option>
+                            <option value="1.25|1.8">Semicompacto / Franco</option>
+                            <option value="1.30|1.2">Duro / Rocoso</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-gray-800 flex flex-wrap justify-between text-xs text-gray-300 gap-2">
+                    <div>Volumen Banco: <span id="m1_resVolBanco" class="text-brandGold font-bold">6.00 m³</span></div>
+                    <div>Esponjamiento: <span id="m1_resFactorEsp" class="text-brandGold font-bold">+20%</span></div>
+                    <div>Volumen Desalojo: <span id="m1_resVolDesalojo" class="text-brandGold font-bold">7.20 m³</span></div>
+                </div>
+            </div>
+
+            <!-- Comparativo Manual vs Maquinaria -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-brandDark p-4 rounded-xl border border-brandCardBorder">
+                    <h3 class="text-sm font-bold text-brandGold uppercase mb-3">⛏️ Opción A: Manual</h3>
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block text-gray-300 mb-1">Cantidad de Peones:</label>
+                            <input type="number" id="m1_cantPeones" value="2" min="1" oninput="m1_calcular()" class="w-full bg-black border border-gray-600 rounded p-2 text-white focus:border-brandGold focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-1">Jornal Diario (<span class="currencySymbol">$</span>):</label>
+                            <input type="number" id="m1_costoJornal" value="15.00" oninput="m1_calcular()" class="w-full bg-black border border-gray-600 rounded p-2 text-white focus:border-brandGold focus:outline-none">
+                        </div>
+                        <div class="bg-black/60 p-3 rounded border border-gray-800 space-y-1 text-gray-300">
+                            <p>Tiempo: <span id="m1_diasManual" class="text-brandGold font-bold">1.2 días</span></p>
+                            <p>Costo: <span id="m1_costoManual" class="text-brandGold font-bold"><span class="currencySymbol">$</span>36.00</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-brandDark p-4 rounded-xl border border-brandCardBorder">
+                    <h3 class="text-sm font-bold text-brandGold uppercase mb-3">🚜 Opción B: Maquinaria</h3>
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block text-gray-300 mb-1">Tipo de Máquina:</label>
+                            <select id="m1_tipoMaq" onchange="m1_calcular()" class="w-full bg-black border border-gray-600 rounded p-2 text-white focus:border-brandGold focus:outline-none">
+                                <option value="12|25.00" selected>Miniexcavadora (12 m³/hr)</option>
+                                <option value="25|40.00">Retroexcavadora (25 m³/hr)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-1">Precio por Hora (<span class="currencySymbol">$</span>):</label>
+                            <input type="number" id="m1_costoHoraMaq" value="25.00" oninput="m1_calcular()" class="w-full bg-black border border-gray-600 rounded p-2 text-white focus:border-brandGold focus:outline-none">
+                        </div>
+                        <div class="bg-black/60 p-3 rounded border border-gray-800 space-y-1 text-gray-300">
+                            <p>Tiempo: <span id="m1_horasMaq" class="text-brandGold font-bold">0.50 horas</span></p>
+                            <p>Costo: <span id="m1_costoMaq" class="text-brandGold font-bold"><span class="currencySymbol">$</span>12.50</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Costos -->
+            <div class="bg-black/50 p-4 rounded-xl border border-brandCardBorder overflow-x-auto">
+                <h3 class="text-sm font-bold text-brandGoldLight uppercase mb-3 tracking-wider">3. Desglose Total</h3>
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-700 text-gray-400">
+                            <th class="py-2 px-2">Recurso</th>
+                            <th class="py-2 px-2 text-center">Cantidad</th>
+                            <th class="py-2 px-2 text-center">Unidad</th>
+                            <th class="py-2 px-2 text-right">Precio U.</th>
+                            <th class="py-2 px-2 text-right">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="m1_tbodyCostos" class="divide-y divide-gray-800 text-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- REJILLA DE RESTANTES MÓDULOS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="modulesGrid"></div>
+    </main>
+
+    <!-- SCRIPTS DE FUNCIONAMIENTO -->
+    <script>
+        let currentSymbol = '$';
+
+        const modulosList = [
+            { id: 2, title: "Cimientos y Zapatas", img: "https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=600&q=80" },
+            { id: 3, title: "Losa", img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80" },
+            { id: 4, title: "Vigas", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" },
+            { id: 5, title: "Acabados (Paredes y Repello)", img: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=600&q=80" },
+            { id: 6, title: "Tablaroca", img: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=600&q=80" },
+            { id: 7, title: "Instalaciones PVC", img: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=600&q=80" },
+            { id: 8, title: "Pisos y Cerámicas", img: "https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?auto=format&fit=crop&w=600&q=80" },
+            { id: 9, title: "Pintura", img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80" }
+        ];
+
+        function cargarModulosRestantes() {
+            const grid = document.getElementById('modulesGrid');
+            grid.innerHTML = '';
+            modulosList.forEach((mod) => {
+                const card = document.createElement('div');
+                card.className = "bg-brandCard border border-brandCardBorder hover:border-brandGold transition-all rounded-xl overflow-hidden cursor-pointer group shadow-lg flex flex-col";
+                card.innerHTML = `
+                    <div class="h-32 overflow-hidden relative">
+                        <img src="${mod.img}" alt="${mod.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-2 left-2 bg-black/80 border border-brandGold px-2 py-0.5 rounded text-[10px] font-bold text-brandGold">#${mod.id}</div>
+                    </div>
+                    <div class="p-3 flex-1 flex flex-col justify-between">
+                        <h3 class="font-bold text-sm text-gray-100 group-hover:text-brandGold transition-colors">${mod.title}</h3>
+                        <span class="text-[11px] text-brandGoldLight font-medium mt-2 block">Abrir Módulo &rarr;</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function actualizarMoneda() {
+            const select = document.getElementById('currencySelect');
+            currentSymbol = select.options[select.selectedIndex].getAttribute('data-symbol');
+            document.querySelectorAll('.currencySymbol').forEach(el => el.textContent = currentSymbol);
+            m1_calcular();
+        }
+
+        function m1_calcular() {
+            const largo = parseFloat(document.getElementById('m1_largo').value) || 0;
+            const ancho = parseFloat(document.getElementById('m1_ancho').value) || 0;
+            const profundidad = parseFloat(document.getElementById('m1_profundidad').value) || 0;
+
+            const terrenoVal = document.getElementById('m1_tipoTerreno').value.split('|');
+            const factorEsp = parseFloat(terrenoVal[0]);
+            const rendPeonDia = parseFloat(terrenoVal[1]);
+
+            const volBanco = largo * ancho * profundidad;
+            const volDesalojo = volBanco * factorEsp;
+            const pctEsp = Math.round((factorEsp - 1) * 100);
+
+            document.getElementById('m1_resVolBanco').textContent = `${volBanco.toFixed(2)} m³`;
+            document.getElementById('m1_resFactorEsp').textContent = `+${pctEsp}%`;
+            document.getElementById('m1_resVolDesalojo').textContent = `${volDesalojo.toFixed(2)} m³`;
+
+            const cantPeones = parseInt(document.getElementById('m1_cantPeones').value) || 1;
+            const costoJornal = parseFloat(document.getElementById('m1_costoJornal').value) || 0;
+            const diasTotalesMan = volBanco / (rendPeonDia * cantPeones);
+            const costoTotalMan = diasTotalesMan * cantPeones * costoJornal;
+
+            document.getElementById('m1_diasManual').textContent = `${diasTotalesMan.toFixed(1)} días`;
+            document.getElementById('m1_costoManual').textContent = `${currentSymbol}${costoTotalMan.toFixed(2)}`;
+
+            const maqVal = document.getElementById('m1_tipoMaq').value.split('|');
+            const rendMaqHr = parseFloat(maqVal[0]);
+            const costoHoraMaq = parseFloat(document.getElementById('m1_costoHoraMaq').value) || 0;
+            const hrsMaq = volBanco / rendMaqHr;
+            const costoTotalMaq = hrsMaq * costoHoraMaq;
+
+            document.getElementById('m1_horasMaq').textContent = `${hrsMaq.toFixed(2)} horas`;
+            document.getElementById('m1_costoMaq').textContent = `${currentSymbol}${costoTotalMaq.toFixed(2)}`;
+
+            const tbody = document.getElementById('m1_tbodyCostos');
+            tbody.innerHTML = `
+                <tr>
+                    <td class="py-2 px-2 font-bold">Volumen Excavado (Banco)</td>
+                    <td class="py-2 px-2 text-center font-bold text-brandGold">${volBanco.toFixed(2)}</td>
+                    <td class="py-2 px-2 text-center">m³</td>
+                    <td class="py-2 px-2 text-right">-</td>
+                    <td class="py-2 px-2 text-right">-</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-2 font-bold">Mano de Obra Manual (Peones)</td>
+                    <td class="py-2 px-2 text-center font-bold text-brandGold">${diasTotalesMan.toFixed(1)}</td>
+                    <td class="py-2 px-2 text-center">Días</td>
+                    <td class="py-2 px-2 text-right">${currentSymbol}${(costoJornal * cantPeones).toFixed(2)}</td>
+                    <td class="py-2 px-2 text-right font-bold text-brandGold">${currentSymbol}${costoTotalMan.toFixed(2)}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-2 font-bold">Maquinaria Pesada</td>
+                    <td class="py-2 px-2 text-center font-bold text-brandGold">${hrsMaq.toFixed(2)}</td>
+                    <td class="py-2 px-2 text-center">Horas</td>
+                    <td class="py-2 px-2 text-right">${currentSymbol}${costoHoraMaq.toFixed(2)}</td>
+                    <td class="py-2 px-2 text-right font-bold text-brandGold">${currentSymbol}${costoTotalMaq.toFixed(2)}</td>
+                </tr>
+            `;
+        }
+
+        function activarDictadoVoz() { alert("🎤 Escuchando dimensiones de obra..."); }
+        function escanearPlano(input) { if (input.files && input.files[0]) { alert("Analizando plano..."); } }
+        function abrirBitacora() { alert("Abriendo bitácora..."); }
+        function abrirHistorial() { alert("Abriendo historial..."); }
+
+        window.onload = function() {
+            cargarModulosRestantes();
+            m1_calcular();
+            actualizarMoneda();
+        };
+    </script>
+</body>
+</html>
